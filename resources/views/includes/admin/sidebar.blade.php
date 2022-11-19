@@ -73,7 +73,7 @@
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0" href=" / ">
             <img src="{{ asset('backend/img/logo-ct-dark.png') }}" class="navbar-brand-img h-100" alt="main_logo">
-            <span class="ms-1 font-weight-bold">
+            <span class="ms-1 font-weight-bold"> Dashboard
                 @if (Auth::user()->role == '1')
                 User
                 @endif

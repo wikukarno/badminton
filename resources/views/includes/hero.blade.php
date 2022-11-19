@@ -7,8 +7,19 @@
                     pariatur.</p>
                 <div id="date-countdown"></div>
                 <p>
-                    <a href="#" class="btn btn-primary py-3 px-4 mr-3">Pendaftaran</a>
-                    <a href="#" class="more light">Masuk</a>
+                    @auth
+                    @if (Auth::user()->role == '0')
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-primary py-3 px-4 mr-3">Kembali
+                        Kedashboard</a>
+                    @else
+                    <a href="{{ route('user.dashboard') }}" class="btn btn-primary py-3 px-4 mr-3">Kembali
+                        Kedashboard</a>
+                    @endif
+                    @endauth
+                    @guest
+                    <a href="{{ route('register') }}" class="btn btn-primary py-3 px-4 mr-3">Pendaftaran</a>
+                    <a href="{{ route('login') }}" class="more light">Masuk</a>
+                    @endguest
                 </p>
             </div>
         </div>
