@@ -2,35 +2,54 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="./assets/img/favicon.png">
-    <title>
-        @yield('title')
-    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>@yield('title')</title>
+
     @stack('before-styles')
     @include('includes.admin.styles')
     @stack('after-styles')
 </head>
 
-<body class="g-sidenav-show   bg-gray-100">
-    <div class="min-height-300 bg-primary position-absolute w-100"></div>
-    @include('includes.admin.sidebar')
-    <main class="main-content position-relative border-radius-lg ">
-        @include('includes.admin.navbar')
-        <div class="container-fluid py-4">
+<body>
+    <div id="app">
+        <div class="main-wrapper main-wrapper-1">
+            <div class="navbar-bg"></div>
+            @include('includes.admin.navbar')
+            @include('includes.admin.sidebar')
             @yield('content')
             @include('includes.admin.footer')
         </div>
-    </main>
-    {{-- @include('includes.admin.plugins') --}}
+    </div>
 
-    @include('includes.admin.modal-logout')
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Apakah anda yakin ingin keluar ?</div>
+                <div class="modal-footer">
+                    <form action="{{ url('logout') }}" method="POST">
+                        @csrf
+                        <button class="btn btn-danger" type="button" data-dismiss="modal">Batal</button>
+                        <button class="btn btn-primary" type="submit">Keluar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    @include('sweetalert::alert')
     @stack('before-scripts')
     @include('includes.admin.scripts')
     @stack('after-scripts')
+
 </body>
 
 </html>

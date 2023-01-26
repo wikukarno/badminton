@@ -11,6 +11,8 @@
                     <div class="col-xl-5 col-lg-5 col-md-5 d-flex flex-column mx-lg-0 mx-auto">
                         <div class="card shadow-lg">
                             <div class="card-header pb-0 text-center">
+                                <img src="{{ asset('assets/images/pbsi.png') }}" class="img-fluid mb-3" style="max-height: 80px" alt="pbsi" />
+
                                 <h4 class="font-weight-bolder">Daftar Sekarang</h4>
                                 <p class="mb-0">Daftarkan diri anda untuk mengikuti perlombaan</p>
                             </div>

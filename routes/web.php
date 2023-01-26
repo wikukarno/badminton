@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\PenggunaController;
+use App\Http\Controllers\Admin\PerlombaanController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\User\DashboardUserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -20,10 +23,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('dashboard/admin')
+Route::prefix('pages/admin')
     ->middleware(['auth', 'admin'])
     ->group(function () {
-        Route::get('/', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
+        Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('0.dashboard');
+
+        // Perlombaan
+        Route::get('/perlombaan', [PerlombaanController::class, 'index'])->name('0.perlombaan');
+        Route::post('/tambah/perlombaan', [PerlombaanController::class, 'store'])->name('0.perlombaan.store');
+        Route::post('/show/perlombaan', [PerlombaanController::class, 'show'])->name('0.show.perlombaan');
+        Route::post('/update/perlombaan', [PerlombaanController::class, 'update'])->name('0.update.perlombaan');
+        Route::post('/hapus/perlombaan', [PerlombaanController::class, 'destroy'])->name('0.delete.perlombaan');
+
+        Route::get('/pengguna', [PenggunaController::class, 'index'])->name('0.pengguna');
+        Route::get('/akun', [ProfileController::class, 'index'])->name('0.akun');
+        Route::post('/get-akun', [ProfileController::class, 'show'])->name('0.get-akun');
+        Route::post('/akun/update', [ProfileController::class, 'update'])->name('0.update-akun');
+        Route::post('/ubah-foto', [ProfileController::class, 'ubahFoto'])->name('0.ubah-foto');
     });
 
 Route::prefix('dashboard/user')

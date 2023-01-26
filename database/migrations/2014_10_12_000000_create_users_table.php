@@ -26,6 +26,10 @@ return new class extends Migration
             $table->string('desa')->nullable();
             $table->string('alamat')->nullable();
             $table->string('photo')->nullable();
+            $table->enum('status_account', ['pending', 'aktif', 'nonaktif', 'ditolak'])->default('pending');
+            $table->string('ktp')->nullable();
+            $table->string('kk')->nullable();
+            $table->string('alasan_penolakan')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

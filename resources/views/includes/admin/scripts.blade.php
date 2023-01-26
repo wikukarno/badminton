@@ -1,102 +1,63 @@
-<!--   Core JS Files   -->
-<script src="{{ asset('backend/js/core/popper.min.js') }}"></script>
-<script src="{{ asset('backend/js/core/bootstrap.min.js') }}"></script>
-<script src="{{ asset('backend/js/plugins/perfect-scrollbar.min.js') }}"></script>
-<script src="{{ asset('backend/js/plugins/smooth-scrollbar.min.js') }}"></script>
-<script src="{{ asset('backend/js/plugins/chartjs.min.js') }}"></script>
-<script>
-    var ctx1 = document.getElementById("chart-line").getContext("2d");
+<!-- General JS Scripts -->
+<script src="{{ asset('assets/modules/jquery.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+    integrity="sha512-AIOTidJAcHBH2G/oZv9viEGXRqDNmfdPVPYOYKGy3fti0xIplnlgMHUGfuNRzC6FkzIo0iIxgFnr9RikFxK+sw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{{ asset('assets/modules/popper.js') }}"></script>
+<script src="{{ asset('assets/modules/tooltip.js') }}"></script>
+<script src="{{ asset('assets/modules/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/modules/nicescroll/jquery.nicescroll.min.js') }}"></script>
+<script src="{{ asset('assets/modules/moment.min.js') }}"></script>
+<script src="{{ asset('assets/js/stisla.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"
+    integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
+<!-- JS Libraies -->
+<script src="{{ asset('assets/modules/simple-weather/jquery.simpleWeather.min.js') }}"></script>
+<script src="{{ asset('assets/modules/chart.min.js') }}"></script>
+<script src="{{ asset('assets/modules/jqvmap/dist/jquery.vmap.min.js') }}"></script>
+<script src="{{ asset('assets/modules/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.min.js"
+    integrity="sha512-hkBsuW3UmWrE2sPDxZnsQeGRdSi3XcTQAeQqc67ghd4B78riim8RJC3D+DFGp4LkTGlElMo8AYdK/AXRJD43UA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{{ asset('assets/modules/summernote/summernote-bs4.js') }}"></script>
 
-    gradientStroke1.addColorStop(1, 'rgba(94, 114, 228, 0.2)');
-    gradientStroke1.addColorStop(0.2, 'rgba(94, 114, 228, 0.0)');
-    gradientStroke1.addColorStop(0, 'rgba(94, 114, 228, 0)');
-    new Chart(ctx1, {
-      type: "line",
-      data: {
-        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [{
-          label: "Mobile apps",
-          tension: 0.4,
-          borderWidth: 0,
-          pointRadius: 0,
-          borderColor: "#5e72e4",
-          backgroundColor: gradientStroke1,
-          borderWidth: 3,
-          fill: true,
-          data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-          maxBarThickness: 6
+<script src="{{ asset('assets/modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
 
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          }
-        },
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [5, 5]
-            },
-            ticks: {
-              display: true,
-              padding: 10,
-              color: '#fbfbfb',
-              font: {
-                size: 11,
-                family: "Open Sans",
-                style: 'normal',
-                lineHeight: 2
-              },
+<!-- Page Specific JS File -->
+<script src="{{ asset('assets/js/page/index-0.js') }}"></script>
+
+<!-- Template JS File -->
+<script src="{{ asset('assets/js/scripts.js') }}"></script>
+{{-- <script src="{{ asset('build/assets/app.024077bb.js') }}"></script> --}}
+
+<script src="{{ asset('assets/js/custom.js') }}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+    integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{{-- <script>
+    jQuery.datetimepicker.setLocale('id');
+    jQuery(['#tanggal_lahir', '#tanggal_meninggal', '#tanggal_dimakamkan', '#tanggal_pelaksanaan_izin']).datetimepicker({
+        i18n:{
+            de:
+            {
+                months:[
+                'Januari','Februari','Maret','April',
+                'Mei','Juni','Juli','Agustus',
+                'September','Oktober','November','Desember',
+                ],
+                dayOfWeek:[
+                "So.", "Mo", "Di", "Mi",
+                "Do", "Fr", "Sa.",
+                ]
             }
-          },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false,
-              borderDash: [5, 5]
-            },
-            ticks: {
-              display: true,
-              color: '#ccc',
-              padding: 20,
-              font: {
-                size: 11,
-                family: "Open Sans",
-                style: 'normal',
-                lineHeight: 2
-              },
-            }
-          },
         },
-      },
+        timepicker:false,
+        format:'d.m.Y'
     });
-</script>
-<script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
-</script>
-<!-- Github buttons -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-<!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-<script src="{{ asset('backend/js/argon-dashboard.min.js?v=2.0.4') }}"></script>
+</script> --}}

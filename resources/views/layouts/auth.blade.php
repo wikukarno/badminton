@@ -9,12 +9,12 @@
     <title>
         @yield('title')
     </title>
-    @include('includes.admin.styles')
+    @include('includes.auth.styles')
 </head>
 
 <body class="">
     @yield('content')
-    @include('includes.admin.scripts')
+    @include('includes.auth.scripts')
 </body>
 
 </html>
