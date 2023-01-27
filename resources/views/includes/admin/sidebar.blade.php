@@ -29,7 +29,7 @@
             </li>
 
             <li class="{{ (request()->is('pages/admin/wasit') ? 'active' : '') }}">
-                <a href="#" class="nav-link"><i class="fas fa-user-shield"></i>
+                <a href="{{ route('0.wasit') }}" class="nav-link"><i class="fas fa-user-shield"></i>
                     <span>Wasit</span></a>
             </li>
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\PenggunaController;
 use App\Http\Controllers\Admin\PerlombaanController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\WasitController;
 use App\Http\Controllers\User\DashboardUserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,13 @@ Route::prefix('pages/admin')
         Route::post('/show/perlombaan', [PerlombaanController::class, 'show'])->name('0.show.perlombaan');
         Route::post('/update/perlombaan', [PerlombaanController::class, 'update'])->name('0.update.perlombaan');
         Route::post('/hapus/perlombaan', [PerlombaanController::class, 'destroy'])->name('0.delete.perlombaan');
+        
+        // Perlombaan
+        Route::get('/wasit', [WasitController::class, 'index'])->name('0.wasit');
+        Route::post('/tambah/wasit', [WasitController::class, 'store'])->name('0.wasit.store');
+        Route::post('/show/wasit', [WasitController::class, 'show'])->name('0.show.wasit');
+        Route::post('/update/wasit', [WasitController::class, 'update'])->name('0.update.wasit');
+        Route::post('/hapus/wasit', [WasitController::class, 'destroy'])->name('0.delete.wasit');
 
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('0.pengguna');
         Route::get('/akun', [ProfileController::class, 'index'])->name('0.akun');
