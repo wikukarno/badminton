@@ -10,7 +10,7 @@
             </div>
             <form id="form-tambah-wasit" method="POST">
                 @csrf
-                <input type="text" name="id_wasit" id="id_wasit">
+                <input type="hidden" name="id_wasit" id="id_wasit">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12 col-lg-6">

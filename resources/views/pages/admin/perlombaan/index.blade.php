@@ -138,7 +138,7 @@
                 $('#tambahPerlombaanModal').modal('hide');
                 Swal.fire(
                     'Berhasil!',
-                    'Data berhasil dihapus.',
+                    res.message,
                     'success'
                 );
             },
