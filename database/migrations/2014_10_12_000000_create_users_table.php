@@ -19,8 +19,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('role')->default('1');
             $table->string('phone')->nullable();
+            $table->string('jenis_kelamin')->nullable();
             $table->string('tempat_lahir')->nullable();
             $table->string('tanggal_lahir')->nullable();
+            $table->string('pekerjaan')->nullable();
+            $table->string('agama')->nullable();
             $table->string('kabupaten')->nullable();
             $table->string('kecamatan')->nullable();
             $table->string('desa')->nullable();

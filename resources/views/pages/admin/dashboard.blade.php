@@ -18,6 +18,7 @@
                             <h4>Total Pengguna</h4>
                         </div>
                         <div class="card-body">
+                            {{ $getPengguna }}
                         </div>
                     </div>
                 </div>
@@ -32,6 +33,7 @@
                             <h4>Perlombaan</h4>
                         </div>
                         <div class="card-body">
+                            {{ $getPerlombaan }}
                         </div>
                     </div>
                 </div>
@@ -46,6 +48,7 @@
                             <h4>Berita</h4>
                         </div>
                         <div class="card-body">
+                            {{ $getBerita }}
                         </div>
                     </div>
                 </div>
@@ -63,6 +66,7 @@
                             <h4>Permintaan Verifikasi</h4>
                         </div>
                         <div class="card-body">
+                            {{ $getVerifikasi }}
                         </div>
                     </div>
                 </div>
@@ -77,6 +81,7 @@
                             <h4>Wasit</h4>
                         </div>
                         <div class="card-body">
+                            {{ $getWasit }}
                         </div>
                     </div>
                 </div>

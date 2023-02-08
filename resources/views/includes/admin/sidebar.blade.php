@@ -24,7 +24,7 @@
             </li>
 
             <li class="{{ (request()->is('pages/admin/verifikasi') ? 'active' : '') }}">
-                <a href="#" class="nav-link"><i class="fas fa-user-check"></i>
+                <a href="{{ route('0.verifikasi') }}" class="nav-link"><i class="fas fa-user-check"></i>
                     <span>Verifikasi</span></a>
             </li>
 

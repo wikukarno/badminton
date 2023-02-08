@@ -36,14 +36,21 @@ Route::prefix('pages/admin')
         Route::post('/update/perlombaan', [PerlombaanController::class, 'update'])->name('0.update.perlombaan');
         Route::post('/hapus/perlombaan', [PerlombaanController::class, 'destroy'])->name('0.delete.perlombaan');
         
-        // Perlombaan
+        // Wasit
         Route::get('/wasit', [WasitController::class, 'index'])->name('0.wasit');
         Route::post('/tambah/wasit', [WasitController::class, 'store'])->name('0.wasit.store');
         Route::post('/show/wasit', [WasitController::class, 'show'])->name('0.show.wasit');
         Route::post('/update/wasit', [WasitController::class, 'update'])->name('0.update.wasit');
         Route::post('/hapus/wasit', [WasitController::class, 'destroy'])->name('0.delete.wasit');
 
+        Route::get('/verifikasi', [DashboardAdminController::class, 'getVerifikasi'])->name('0.get.verifikasi');
+        Route::get('/verifikasi/detail/{id}', [DashboardAdminController::class, 'detailVerifikasi'])->name('0.detail.verifikasi');
+        Route::post('/verifikasi', [DashboardAdminController::class, 'verifikasi'])->name('0.verifikasi');
+        Route::post('/verifikasi/tolak', [DashboardAdminController::class, 'tolakVerifikasi'])->name('0.tolak.verifikasi');
+
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('0.pengguna');
+        Route::post('/pengguna/blokir', [PenggunaController::class, 'blokir'])->name('0.blokir.pengguna');
+        
         Route::get('/akun', [ProfileController::class, 'index'])->name('0.akun');
         Route::post('/get-akun', [ProfileController::class, 'show'])->name('0.get-akun');
         Route::post('/akun/update', [ProfileController::class, 'update'])->name('0.update-akun');

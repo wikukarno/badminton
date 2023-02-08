@@ -61,7 +61,7 @@ class WasitController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'photo' => 'mime:jpg,jpeg,png|max:2048',
+            'photo' => 'mimes:jpg,jpeg,png|max:2048',
         ]);
         $fileLama = Wasit::find($request->id_wasit);
         if ($request->hasFile('photo')) {

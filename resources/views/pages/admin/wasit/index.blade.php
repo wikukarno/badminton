@@ -56,6 +56,7 @@
     function btnUpdateWasit(id){
         $('#tambahWasitModal').modal('show');
         $('.modal-title').text('Update Wasit');
+        $('#btnSimpanWasit').html('Update');
         $('#id_wasit').val(id);
 
         $.ajax({
