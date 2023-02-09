@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\PenggunaController;
 use App\Http\Controllers\Admin\PerlombaanController;
@@ -29,6 +30,9 @@ Route::prefix('pages/admin')
     ->group(function () {
         Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('0.dashboard');
 
+        // Berita
+        Route::resource('berita', BeritaController::class);
+
         // Perlombaan
         Route::get('/perlombaan', [PerlombaanController::class, 'index'])->name('0.perlombaan');
         Route::post('/tambah/perlombaan', [PerlombaanController::class, 'store'])->name('0.perlombaan.store');
@@ -42,7 +46,8 @@ Route::prefix('pages/admin')
         Route::post('/show/wasit', [WasitController::class, 'show'])->name('0.show.wasit');
         Route::post('/update/wasit', [WasitController::class, 'update'])->name('0.update.wasit');
         Route::post('/hapus/wasit', [WasitController::class, 'destroy'])->name('0.delete.wasit');
-
+        
+        // Verifikasi
         Route::get('/verifikasi', [DashboardAdminController::class, 'getVerifikasi'])->name('0.get.verifikasi');
         Route::get('/verifikasi/detail/{id}', [DashboardAdminController::class, 'detailVerifikasi'])->name('0.detail.verifikasi');
         Route::post('/verifikasi', [DashboardAdminController::class, 'verifikasi'])->name('0.verifikasi');

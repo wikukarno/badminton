@@ -34,7 +34,7 @@
             </li>
 
             <li class="{{ (request()->is('pages/admin/berita') ? 'active' : '') }}">
-                <a href="#" class="nav-link"><i class="fas fa-book"></i>
+                <a href="{{ route('berita.index') }}" class="nav-link"><i class="fas fa-book"></i>
                     <span>Berita</span></a>
             </li>
 

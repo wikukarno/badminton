@@ -9,10 +9,10 @@
                 <p>
                     @auth
                     @if (Auth::user()->role == '0')
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-primary py-3 px-4 mr-3">Kembali
+                    <a href="{{ route('0.dashboard') }}" class="btn btn-primary py-3 px-4 mr-3">Kembali
                         Kedashboard</a>
                     @else
-                    <a href="{{ route('user.dashboard') }}" class="btn btn-primary py-3 px-4 mr-3">Kembali
+                    <a href="{{ route('1.dashboard') }}" class="btn btn-primary py-3 px-4 mr-3">Kembali
                         Kedashboard</a>
                     @endif
                     @endauth

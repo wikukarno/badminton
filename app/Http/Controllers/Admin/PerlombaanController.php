@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Perlombaan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -21,6 +22,9 @@ class PerlombaanController extends Controller
 
             return datatables()->of($query)
                 ->addIndexColumn()
+                ->editColumn('tanggal', function ($item) {
+                    return Carbon::parse($item->tanggal)->isoFormat('D MMMM Y');
+                })
                 ->editColumn('action', function ($item) {
                     return '
                         <button class="btn btn-warning btn-sm mb-3" onClick="btnUpdatePerlombaan(' . $item->id . ')">
