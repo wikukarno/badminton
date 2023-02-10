@@ -6,7 +6,9 @@ use App\Http\Controllers\Admin\PenggunaController;
 use App\Http\Controllers\Admin\PerlombaanController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\WasitController;
-use App\Http\Controllers\User\DashboardUserController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PerlombaanUserController;
+use App\Http\Controllers\ProfileUserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -62,10 +64,13 @@ Route::prefix('pages/admin')
         Route::post('/ubah-foto', [ProfileController::class, 'ubahFoto'])->name('0.ubah-foto');
     });
 
-Route::prefix('dashboard/user')
+Route::prefix('pages/user')
     ->middleware(['auth', 'user'])
     ->group(function () {
-        Route::get('/', [DashboardUserController::class, 'index'])->name('user.dashboard');
+        Route::get('/', [DashboardController::class, 'index'])->name('1.dashboard');
+
+        Route::resource('perlombaan', PerlombaanUserController::class);
+        Route::resource('akun', ProfileUserController::class);
     });
 
 

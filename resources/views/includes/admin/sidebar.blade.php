@@ -5,7 +5,6 @@
             <a href="/">
                 <img alt="image" src="{{ asset('assets/images/pbsi.png') }}" style="max-height: 50px"
                     class="header-logo" />
-                <span class="logo-name">PBSI</span>
             </a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
@@ -59,51 +58,33 @@
 </div>
 @endif
 
-@if (Auth::user()->roles == '1')
+@if (Auth::user()->role == '1')
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
             <a href="/">
-                <img alt="image" src="{{ asset('assets/images/logo.jpg') }}" style="max-height: 50px"
-                    class="header-logo" />
-                <span class="logo-name">Lurah Sorek Satu</span>
+                <img alt="image" src="{{ asset('assets/images/pbsi.png') }}" style="max-height: 50px" class="header-logo" />
             </a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="index.html">LSS</a>
+            <a href="/">PBSI</a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
-            <li class="{{ (request()->is('pages/dashboard/user') ? 'active' : '') }}">
-                <a href="{{ route('user.dashboard') }}" class="nav-link"><i
+            <li class="{{ (request()->is('pages/user') ? 'active' : '') }}">
+                <a href="{{ route('1.dashboard') }}" class="nav-link"><i
                         class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
             <li class="menu-header">Starter</li>
             <li
-                class="{{ (request()->is('pages/dashboard/user/sku-user') ? 'active' : '') }} {{ (request()->is('pages/dashboard/user/sku-user/create') ? 'active' : '') }}">
-                <a href="{{ route('sku-user.index') }}" class="nav-link"><i class="fas fa-store"></i>
-                    <span>SK Usaha</span></a>
-            </li>
-            <li
-                class="{{ (request()->is('pages/dashboard/user/skp-user') ? 'active' : '') }} {{ (request()->is('pages/dashboard/user/skp-user/create') ? 'active' : '') }}">
-                <a href="{{ route('skp-user.index') }}" class="nav-link"><i class="fas fa-file"></i>
-                    <span>SK Pemakaman</span></a>
-            </li>
-            <li
-                class="{{ (request()->is('pages/dashboard/user/sktm-user') ? 'active' : '') }} {{ (request()->is('pages/dashboard/user/sktm-user/create') ? 'active' : '') }}">
-                <a href="{{ route('sktm-user.index') }}" class="nav-link"><i class="fas fa-columns"></i>
-                    <span>SK Tidak Mampu</span></a>
+                class="{{ (request()->is('pages/user/perlombaan') ? 'active' : '') }} {{ (request()->is('pages/dashboard/user/sku-user/create') ? 'active' : '') }}">
+                <a href="{{ route('perlombaan.index') }}" class="nav-link"><i class="fas fa-medal"></i>
+                    <span>Perlombaan</span></a>
             </li>
 
             <li
-                class="{{ (request()->is('pages/dashboard/user/ski-user') ? 'active' : '') }} {{ (request()->is('pages/dashboard/user/ski-user/create') ? 'active' : '') }}">
-                <a href="{{ route('ski-user.index') }}" class="nav-link"><i class="fas fa-info-circle"></i>
-                    <span>SK Izin</span></a>
-            </li>
-
-            <li
-                class="{{ (request()->is('pages/dashboard/user/akun-user') ? 'active' : '') }} {{ (request()->is('pages/dashboard/user/akun-user/{id}/edit') ? 'active' : '') }}">
-                <a href="{{ route('akun-user.index') }}" class="nav-link"><i class="fas fa-user"></i>
+                class="{{ (request()->is('pages/user/akun') ? 'active' : '') }} {{ (request()->is('pages/dashboard/user/akun-user/{id}/edit') ? 'active' : '') }}">
+                <a href="{{ route('akun.index') }}" class="nav-link"><i class="fas fa-user"></i>
                     <span>Akun</span></a>
             </li>
         </ul>
