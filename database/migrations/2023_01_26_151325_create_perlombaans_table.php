@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('perlombaans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->text('deskripsi');
-            $table->dateTime('tanggal');
-            $table->string('tempat');
-            $table->string('kuota');
-            $table->string('status');
+            $table->string('nama_perlombaan');
+            $table->text('deskripsi_perlombaan');
+            $table->dateTime('tanggal_pendaftaran_dibuka');
+            $table->dateTime('tanggal_pendaftaran_ditutup');
+            $table->string('tempat_pelaksanaan');
+            $table->string('status_perlombaan'); //single, team
             $table->timestamps();
             $table->softDeletes();
         });

@@ -11,11 +11,11 @@ class Perlombaan extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'nama',
-        'deskripsi',
-        'tanggal',
-        'kuota',
-        'tempat',
-        'status',
+        'nama_perlombaan',
+        'deskripsi_perlombaan',
+        'tanggal_pendaftaran_dibuka',
+        'tanggal_pendaftaran_ditutup',
+        'tempat_pelaksanaan',
+        'status_perlombaan',
     ];
 }
