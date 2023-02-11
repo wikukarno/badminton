@@ -42,8 +42,8 @@
                     <span>Data Pengguna</span></a>
             </li>
 
-            <li class="{{ (request()->is('pages/admin/akun') ? 'active' : '') }}">
-                <a href="{{ route('0.akun') }}" class="nav-link"><i class="fas fa-user"></i>
+            <li class="{{ (request()->is('pages/admin/akun-admin') ? 'active' : '') }}">
+                <a href="{{ route('akun-admin.index') }}" class="nav-link"><i class="fas fa-user"></i>
                     <span>Akun</span></a>
             </li>
         </ul>

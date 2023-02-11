@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfileController extends Controller
 {
@@ -15,7 +17,8 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.profile');
+        $users = User::where('id', Auth::user()->id)->first();
+        return view('pages.admin.profile', compact('users'));
     }
 
     /**
@@ -47,18 +50,7 @@ class ProfileController extends Controller
      */
     public function show(Request $request)
     {
-        if (request()->ajax()) {
-            $where = array('users.id' => $request->id);
-            $result = User::where($where)->first();
-            if ($result) {
-                return Response()->json($result);
-            } else {
-                return Response()->json(['error' => 'Akun tidak ditemukan!']);
-            }
-        } else {
-            $result = (['status' => false, 'message' => 'Maaf, akses ditolak!']);
-        }
-        return Response()->json($result);
+        //
     }
 
     /**
@@ -69,7 +61,8 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('pages.admin.edit-profile', compact('user'));
     }
 
     /**
@@ -79,25 +72,34 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $user = User::find($request->id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        $user->address = $request->address;
-        $user->save();
+        $item = User::findOrFail($id);
+        $data = $request->all();
+        
+        if($request->hasFile('photo')){
+            $data['photo'] = $request->file('photo')->store('assets/profile', 'public');
+        }
+
+        if($request->hasFile('ktp')){
+            $data['ktp'] = $request->file('ktp')->store('assets/ktp', 'public');
+        }
+
+        if($request->hasFile('kk')){
+            $data['kk'] = $request->file('kk')->store('assets/kk', 'public');
+        }
+
+        $item->update($data);
+
+        if($item){
+            Alert::success('Success', 'Data Berhasil Diubah');
+            return redirect()->route('akun-admin.index');
+        }else{
+            Alert::error('Error', 'Data Gagal Diubah');
+            return redirect()->route('akun-admin.index');
+        }
     }
 
-    public function ubahFoto(Request $request)
-    {
-        $user = User::find($request->id);
-        $user->avatar = $request->file('avatar')->store('assets/profile', 'public');
-        $user->save();
-
-        // Alert::success('Berhasil', 'Foto Profile Berhasil Diubah');
-        return redirect()->back();
-    }
 
     /**
      * Remove the specified resource from storage.

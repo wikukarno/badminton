@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfileUserController extends Controller
 {
@@ -13,7 +16,8 @@ class ProfileUserController extends Controller
      */
     public function index()
     {
-        return view('pages.user.profile.index');
+        $users = User::where('id', Auth::user()->id)->first();
+        return view('pages.user.profile.index', compact('users'));
     }
 
     /**
@@ -56,7 +60,8 @@ class ProfileUserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('pages.user.profile.edit-profile', compact('user'));
     }
 
     /**
@@ -68,7 +73,30 @@ class ProfileUserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $item = User::findOrFail($id);
+        $data = $request->all();
+
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('assets/profile', 'public');
+        }
+
+        if ($request->hasFile('ktp')) {
+            $data['ktp'] = $request->file('ktp')->store('assets/ktp', 'public');
+        }
+
+        if ($request->hasFile('kk')) {
+            $data['kk'] = $request->file('kk')->store('assets/kk', 'public');
+        }
+
+        $item->update($data);
+
+        if ($item) {
+            Alert::success('Success', 'Data Berhasil Diubah');
+            return redirect()->route('akun.index');
+        } else {
+            Alert::error('Error', 'Data Gagal Diubah');
+            return redirect()->route('akun.index');
+        }
     }
 
     /**

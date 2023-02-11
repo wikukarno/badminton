@@ -58,10 +58,7 @@ Route::prefix('pages/admin')
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('0.pengguna');
         Route::post('/pengguna/blokir', [PenggunaController::class, 'blokir'])->name('0.blokir.pengguna');
         
-        Route::get('/akun', [ProfileController::class, 'index'])->name('0.akun');
-        Route::post('/get-akun', [ProfileController::class, 'show'])->name('0.get-akun');
-        Route::post('/akun/update', [ProfileController::class, 'update'])->name('0.update-akun');
-        Route::post('/ubah-foto', [ProfileController::class, 'ubahFoto'])->name('0.ubah-foto');
+        Route::resource('akun-admin', ProfileController::class);
     });
 
 Route::prefix('pages/user')
