@@ -36,12 +36,13 @@ Route::prefix('pages/admin')
         Route::resource('berita', BeritaController::class);
 
         // Perlombaan
-        Route::get('/perlombaan', [PerlombaanController::class, 'index'])->name('0.perlombaan');
-        Route::post('/tambah/perlombaan', [PerlombaanController::class, 'store'])->name('0.perlombaan.store');
+        // Route::get('/perlombaan', [PerlombaanController::class, 'index'])->name('0.perlombaan');
+        // Route::post('/tambah/perlombaan', [PerlombaanController::class, 'store'])->name('0.perlombaan.store');
         Route::post('/show/perlombaan', [PerlombaanController::class, 'show'])->name('0.show.perlombaan');
         Route::post('/update/perlombaan', [PerlombaanController::class, 'update'])->name('0.update.perlombaan');
         Route::post('/hapus/perlombaan', [PerlombaanController::class, 'destroy'])->name('0.delete.perlombaan');
-        
+
+        Route::resource('perlombaan-admin', PerlombaanController::class);
         // Wasit
         Route::get('/wasit', [WasitController::class, 'index'])->name('0.wasit');
         Route::post('/tambah/wasit', [WasitController::class, 'store'])->name('0.wasit.store');
@@ -66,6 +67,7 @@ Route::prefix('pages/user')
     ->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('1.dashboard');
 
+        Route::get('/perlombaan/{id}/daftar', [PerlombaanUserController::class, 'daftar'])->name('1.daftar');
         Route::resource('perlombaan', PerlombaanUserController::class);
         Route::resource('akun', ProfileUserController::class);
     });

@@ -19,8 +19,9 @@ return new class extends Migration
             $table->text('deskripsi_perlombaan');
             $table->dateTime('tanggal_pendaftaran_dibuka');
             $table->dateTime('tanggal_pendaftaran_ditutup');
+            $table->dateTime('tanggal_pelaksanaan');
             $table->string('tempat_pelaksanaan');
-            $table->string('status_perlombaan'); //single, team
+            $table->string('kategori_perlombaan'); //single, team
             $table->timestamps();
             $table->softDeletes();
         });

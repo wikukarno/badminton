@@ -17,8 +17,8 @@
                         class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
 
-            <li class="{{ (request()->is('pages/admin/perlombaan') ? 'active' : '') }}">
-                <a href="{{ route('0.perlombaan') }}" class="nav-link"><i class="fas fa-medal"></i>
+            <li class="{{ (request()->is('pages/admin/perlombaan-admin') ? 'active' : '') }}">
+                <a href="{{ route('perlombaan-admin.index') }}" class="nav-link"><i class="fas fa-medal"></i>
                     <span>Perlombaan</span></a>
             </li>
 

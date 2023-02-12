@@ -22,11 +22,20 @@ class PerlombaanController extends Controller
 
             return datatables()->of($query)
                 ->addIndexColumn()
-                ->editColumn('tanggal', function ($item) {
-                    return Carbon::parse($item->tanggal)->isoFormat('D MMMM Y');
+                ->editColumn('tanggal_pelaksanaan', function ($item) {
+                    return Carbon::parse($item->tanggal_pelaksanaan)->isoFormat('D MMMM Y');
+                })
+                ->editColumn('tanggal_pendaftaran_dibuka', function ($item) {
+                    return Carbon::parse($item->tanggal_pendaftaran_dibuka)->isoFormat('D MMMM Y');
+                })
+                ->editColumn('tanggal_pendaftaran_ditutup', function ($item) {
+                    return Carbon::parse($item->tanggal_pendaftaran_ditutup)->isoFormat('D MMMM Y');
                 })
                 ->editColumn('action', function ($item) {
                     return '
+                        <a href="javascript:void(0)" class="btn btn-info btn-sm mb-3" onClick="btnShowPerlombaan(' . $item->id . ')">
+                            <i class="fas fa-eye"></i>
+                        </a>
                         <button class="btn btn-warning btn-sm mb-3" onClick="btnUpdatePerlombaan(' . $item->id . ')">
                             <i class="fas fa-pencil-alt"></i>
                         </button>
@@ -63,12 +72,13 @@ class PerlombaanController extends Controller
         $data = Perlombaan::updateOrCreate(
             ['id' => $request->id],
             [
-                'nama' => $request->nama,
-                'deskripsi' => $request->deskripsi,
-                'tanggal' => $request->tanggal,
-                'tempat' => $request->tempat,
-                'kuota' => $request->kuota,
-                'status' => $request->status,
+                'nama_perlombaan' => $request->nama_perlombaan,
+                'deskripsi_perlombaan' => $request->deskripsi_perlombaan,
+                'tanggal_pendaftaran_dibuka' => $request->tanggal_pendaftaran_dibuka,
+                'tanggal_pendaftaran_ditutup' => $request->tanggal_pendaftaran_ditutup,
+                'tanggal_pelaksanaan' => $request->tanggal_pelaksanaan,
+                'tempat_pelaksanaan' => $request->tempat_pelaksanaan,
+                'kategori_perlombaan' => $request->kategori_perlombaan,
             ]
         );
 

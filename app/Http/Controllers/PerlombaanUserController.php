@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Perlombaan;
+use App\Models\Peserta;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -17,6 +20,8 @@ class PerlombaanUserController extends Controller
     public function index()
     {
         $user = User::where('id', Auth::user()->id)->first();
+        $data = Perlombaan::first();
+        $peserta = Peserta::where('users_id', Auth::user()->id)->first();
         if (
             $user->phone == null || $user->jenis_kelamin == null ||
             $user->tempat_lahir == null || $user->tanggal_lahir == null ||
@@ -28,7 +33,39 @@ class PerlombaanUserController extends Controller
             Alert::warning('Mohon Maaf!', 'Silahkan Lengkapi Data Anda Terlebih Dahulu');
             return redirect()->route('akun.index');
         }
-        return view('pages.user.perlombaan.index');
+
+        if (request()->ajax()) {
+            $query = Perlombaan::query();
+
+            return datatables()->of($query)
+                ->addIndexColumn()
+                ->editColumn('tanggal_pelaksanaan', function ($item) {
+                    return Carbon::parse($item->tanggal_pelaksanaan)->isoFormat('D MMMM Y');
+                })
+                ->editColumn('tanggal_pendaftaran_dibuka', function ($item) {
+                    return Carbon::parse($item->tanggal_pendaftaran_dibuka)->isoFormat('D MMMM Y');
+                })
+                ->editColumn('tanggal_pendaftaran_ditutup', function ($item) {
+                    return Carbon::parse($item->tanggal_pendaftaran_ditutup)->isoFormat('D MMMM Y');
+                })
+                ->editColumn('action', function ($item) {
+                    return '
+                        <a href="'. route('perlombaan.show', $item->id) .'" class="btn btn-info btn-sm mb-3" >
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <button class="btn btn-warning btn-sm mb-3" onClick="btnUpdatePerlombaan(' . $item->id . ')">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm mb-3" onClick="btnDeletePerlombaan(' . $item->id . ')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    ';
+                })
+
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('pages.user.perlombaan.index', compact('data', 'peserta'));
     }
 
     /**
@@ -38,7 +75,7 @@ class PerlombaanUserController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.user.perlombaan.create');
     }
 
     /**
@@ -49,7 +86,18 @@ class PerlombaanUserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $data['users_id'] = Auth::user()->id;
+        $data['perlombaans_id'] = $request->perlombaans_id;
+        Peserta::create($data);
+
+        if ($data) {
+            Alert::success('Berhasil', 'Data Berhasil Ditambahkan');
+            return redirect()->route('perlombaan.index');
+        } else {
+            Alert::error('Gagal', 'Data Gagal Ditambahkan');
+            return redirect()->route('perlombaan.index');
+        }
     }
 
     /**
@@ -60,7 +108,8 @@ class PerlombaanUserController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Perlombaan::findOrFail($id);
+        return view('pages.user.perlombaan.show', compact('data'));
     }
 
     /**
@@ -95,5 +144,11 @@ class PerlombaanUserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function daftar($id)
+    {
+        $data = Perlombaan::findOrFail($id);
+        return view('pages.user.perlombaan.create', compact('data'));
     }
 }

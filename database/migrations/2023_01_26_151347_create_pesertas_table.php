@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('pesertas', function (Blueprint $table) {
             $table->id();
             $table->string('users_id');
-            $table->string('perlombaan_id');
+            $table->string('perlombaans_id');
+            $table->string('nama_teman');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -13,7 +13,6 @@ class DashboardController extends Controller
     public function index()
     {
         $perlombaan = Perlombaan::count();
-        // deteksi field table user ada yang kosong atau tidak
         $user = User::where('id', Auth::user()->id)->first();
         if (
             $user->phone == null || $user->jenis_kelamin == null || 

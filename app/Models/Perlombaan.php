@@ -15,7 +15,8 @@ class Perlombaan extends Model
         'deskripsi_perlombaan',
         'tanggal_pendaftaran_dibuka',
         'tanggal_pendaftaran_ditutup',
+        'tanggal_pelaksanaan',
         'tempat_pelaksanaan',
-        'status_perlombaan',
+        'kategori_perlombaan',
     ];
 }

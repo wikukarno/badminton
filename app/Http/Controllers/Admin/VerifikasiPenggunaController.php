@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class VerifikasiPenggunaController extends Controller
 {
@@ -14,7 +16,28 @@ class VerifikasiPenggunaController extends Controller
      */
     public function index()
     {
-        //
+        if (request()->ajax()) {
+            $query = User::where('role', 1)->where('status_account', 'aktif')->get();
+
+            return datatables()->of($query)
+                ->addIndexColumn()
+                ->editColumn('photo', function ($item) {
+                    if ($item->photo != null) {
+                        return '<img src="' . Storage::url($item->photo) . '" class="img-fluid rounded-circle" width="40px" height="40px">';
+                    } else {
+                        return '<img src="' . asset('assets/images/user.png') . '" class="img-fluid rounded-circle" width="40px" height="40px">';
+                    }
+                })
+                ->editColumn('phone', function ($item) {
+                    return $item->phone ?? '-';
+                })
+                ->editColumn('alamat', function ($item) {
+                    return $item->alamat ?? '-';
+                })
+                ->rawColumns(['alamat', 'photo', 'phone', 'action'])
+                ->make(true);
+        }
+        return view('pages.admin.pengguna.index');
     }
 
     /**

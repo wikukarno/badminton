@@ -22,10 +22,10 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Nama</th>
-                                        <th>Tanggal</th>
-                                        <th>Kuota</th>
-                                        <th>Tempat</th>
+                                        <th>Nama Perlombaan</th>
+                                        <th>Tanggal Pelaksanaan</th>
+                                        <th>Pendaftaran Ditutup</th>
+                                        <th>Kategori Perlombaan</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -40,6 +40,7 @@
     </div>
 </section>
 @include('pages.admin.perlombaan.modal-perlombaan')
+@include('pages.admin.perlombaan.modal-show-perlombaan')
 @endsection
 
 @push('after-scripts')
@@ -66,12 +67,40 @@
             },
             dataType: 'json',
             success: (res) => {
-                $('#nama').val(res.nama);
+                $('#nama_perlombaan').val(res.nama_perlombaan);
+                $('#tanggal_pendaftaran_dibuka').val(moment(res.tanggal_pendaftaran_dibuka).format('YYYY-MM-DD'));
+                $('#tanggal_pendaftaran_ditutup').val(moment(res.tanggal_pendaftaran_ditutup).format('YYYY-MM-DD'));
+                $('#tanggal_pelaksanaan').val(moment(res.tanggal_pelaksanaan).format('YYYY-MM-DD'));
+                $('#tempat_pelaksanaan').val(res.tempat_pelaksanaan);
+                $('#kategori_perlombaan').val(res.kategori_perlombaan);
+                $('#deskripsi_perlombaan').val(res.deskripsi_perlombaan);
                 $('#tanggal').val(moment(res.tanggal).format('YYYY-MM-DD'));
-                $('#kuota').val(res.kuota);
-                $('#tempat').val(res.tempat);
-                $('#status').val(res.status);
-                $('#deskripsi').val(res.deskripsi);
+            },
+        });
+    }
+
+    function btnShowPerlombaan(id){
+        $('#showPerlombaanModal').modal('show');
+        $('.modal-title').text('Detail Perlombaan');
+        $('#id_perlombaan').val(id);
+
+        $.ajax({
+            type:'POST',
+            url: "{{ url('/pages/admin/show/perlombaan') }}",
+            data: {
+                id: id,
+                _token: "{{ csrf_token() }}"
+            },
+            dataType: 'json',
+            success: (res) => {
+                $('#show_nama_perlombaan').val(res.nama_perlombaan);
+                $('#show_tanggal_pendaftaran_dibuka').val(moment(res.tanggal_pendaftaran_dibuka).format('YYYY-MM-DD'));
+                $('#show_tanggal_pendaftaran_ditutup').val(moment(res.tanggal_pendaftaran_ditutup).format('YYYY-MM-DD'));
+                $('#show_tanggal_pelaksanaan').val(moment(res.tanggal_pelaksanaan).format('YYYY-MM-DD'));
+                $('#show_tempat_pelaksanaan').val(res.tempat_pelaksanaan);
+                $('#show_kategori_perlombaan').val(res.kategori_perlombaan);
+                $('#show_deskripsi_perlombaan').val(res.deskripsi_perlombaan);
+                $('#show_tanggal').val(moment(res.tanggal).format('YYYY-MM-DD'));
             },
         });
     }
@@ -153,14 +182,14 @@
         serverSide: true,
         ordering: [[1, 'asc']],
         ajax: {
-            url: "{{ route('0.perlombaan') }}",
+            url: "{{ route('perlombaan-admin.index') }}",
         },
         columns: [
             { data: 'DT_RowIndex', name: 'id' },
-            { data: 'nama', name: 'nama' },
-            { data: 'tanggal', name: 'tanggal' },
-            { data: 'kuota', name: 'kuota' },
-            { data: 'tempat', name: 'tempat' },
+            { data: 'nama_perlombaan', name: 'nama_perlombaan' },
+            { data: 'tanggal_pelaksanaan', name: 'tanggal_pelaksanaan' },
+            { data: 'tanggal_pendaftaran_ditutup', name: 'tanggal_pendaftaran_ditutup' },
+            { data: 'kategori_perlombaan', name: 'kategori_perlombaan' },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ],
     });
