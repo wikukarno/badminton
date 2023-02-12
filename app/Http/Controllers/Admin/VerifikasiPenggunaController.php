@@ -17,27 +17,35 @@ class VerifikasiPenggunaController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = User::where('role', 1)->where('status_account', 'aktif')->get();
+            $query = User::where('role', '1')->where('status_account', 'pending')->get();
 
             return datatables()->of($query)
                 ->addIndexColumn()
-                ->editColumn('photo', function ($item) {
-                    if ($item->photo != null) {
-                        return '<img src="' . Storage::url($item->photo) . '" class="img-fluid rounded-circle" width="40px" height="40px">';
+                ->editColumn('avatar', function ($item) {
+                    if ($item->avatar == null) {
+                        return '<img src="' . asset('assets/images/user.png') . '" class="img-fluid" width="50" height="50">';
                     } else {
-                        return '<img src="' . asset('assets/images/user.png') . '" class="img-fluid rounded-circle" width="40px" height="40px">';
+                        return '
+                            <img src="' . asset('storage/' . $item->avatar) . '" alt="avatar" width="50px" height="50px">
+                        ';
                     }
                 })
-                ->editColumn('phone', function ($item) {
-                    return $item->phone ?? '-';
+                ->editColumn('created_at', function ($item) {
+                    return $item->created_at->isoFormat('D MMMM Y');
                 })
-                ->editColumn('alamat', function ($item) {
-                    return $item->alamat ?? '-';
+                ->editColumn('action', function ($item) {
+                    return '
+                        <div class="form-group">
+                            <a href="' . route('0.detail.verifikasi', $item->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></a>
+                            <a href="javascript:void(0)" class="btn btn-sm btn-success" onclick="verifikasiPengguna(' . $item->id . ')"><i class="fas fa-user-check"></i></a>
+                            <a href="javascript:void(0)" class="btn btn-sm btn-danger" onclick="tolakVerifikasi(' . $item->id . ')"><i class="fas fa-user-alt-slash"></i></a>
+                        </div>
+                    ';
                 })
-                ->rawColumns(['alamat', 'photo', 'phone', 'action'])
+                ->rawColumns(['alamat', 'avatar', 'action'])
                 ->make(true);
         }
-        return view('pages.admin.pengguna.index');
+        return view('pages.admin.verifikasi.verifikasi-peserta');
     }
 
     /**
@@ -69,7 +77,9 @@ class VerifikasiPenggunaController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = User::findOrFail($id);
+        $users = User::where('id', $id)->first();
+        return view('pages.admin.verifikasi.detail-verifikasi', compact('data', 'users'));
     }
 
     /**
@@ -90,9 +100,23 @@ class VerifikasiPenggunaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $data = User::findOrFail($request->id);
+        $data->status_account = 'aktif';
+        $data->save();
+
+        if ($data) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil verifikasi pengguna'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal verifikasi pengguna'
+            ]);
+        }
     }
 
     /**
@@ -104,5 +128,25 @@ class VerifikasiPenggunaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function tolakVerifikasi(Request $request)
+    {
+        $data = User::findOrFail($request->id_penolakan);
+        $data->status_account = 'ditolak';
+        $data->alasan_penolakan = $request->alasan_penolakan;
+        $data->save();
+
+        if ($data) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil ditolak'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal ditolak'
+            ]);
+        }
     }
 }

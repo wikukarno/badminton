@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\PenggunaController;
 use App\Http\Controllers\Admin\PerlombaanController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\VerifikasiPenggunaController;
 use App\Http\Controllers\Admin\WasitController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PerlombaanUserController;
@@ -51,10 +52,10 @@ Route::prefix('pages/admin')
         Route::post('/hapus/wasit', [WasitController::class, 'destroy'])->name('0.delete.wasit');
         
         // Verifikasi
-        Route::get('/verifikasi', [DashboardAdminController::class, 'getVerifikasi'])->name('0.get.verifikasi');
-        Route::get('/verifikasi/detail/{id}', [DashboardAdminController::class, 'detailVerifikasi'])->name('0.detail.verifikasi');
-        Route::post('/verifikasi', [DashboardAdminController::class, 'verifikasi'])->name('0.verifikasi');
-        Route::post('/verifikasi/tolak', [DashboardAdminController::class, 'tolakVerifikasi'])->name('0.tolak.verifikasi');
+        Route::get('/verifikasi', [VerifikasiPenggunaController::class, 'index'])->name('0.get.verifikasi');
+        Route::get('/verifikasi/detail/{id}', [VerifikasiPenggunaController::class, 'show'])->name('0.detail.verifikasi');
+        Route::post('/verifikasi', [VerifikasiPenggunaController::class, 'update'])->name('0.verifikasi');
+        Route::post('/verifikasi/tolak', [VerifikasiPenggunaController::class, 'tolakVerifikasi'])->name('0.tolak.verifikasi');
 
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('0.pengguna');
         Route::post('/pengguna/blokir', [PenggunaController::class, 'blokir'])->name('0.blokir.pengguna');

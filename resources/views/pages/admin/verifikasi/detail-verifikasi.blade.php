@@ -19,9 +19,9 @@ Detail Verifikasi Pengguna
                     <div class="card-body">
                             <input type="hidden" name="id" value="{{ Auth::user()->id }}">
                             <div class="text-center">
-                                @if ($users->avatar != null)
+                                @if ($users->photo != null)
 
-                                <img src="{{ Storage::url($users->avatar) }}"
+                                <img src="{{ Storage::url($users->photo) }}"
                                     class="figure-img img-fluid rounded-circle thumbnail-image" alt="foto profile"
                                     id="foto-profile" />
 

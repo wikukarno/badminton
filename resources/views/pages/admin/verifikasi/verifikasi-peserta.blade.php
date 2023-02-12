@@ -38,7 +38,7 @@ Verifikasi Pengguna
     </div>
 </section>
 
-@include('pages.admin.pengguna.modal-tolak-verifikasi')
+@include('pages.admin.verifikasi.modal-tolak-verifikasi')
 @endsection
 
 @push('after-scripts')
@@ -100,7 +100,6 @@ Verifikasi Pengguna
     function tolakVerifikasi(id){
         $('#tolakVerifikasiModal').modal('show');
         $('#id_penolakan').val(id);
-        alert(id);
     }
 
     $('#form-tolak-verifikasi').submit(function(e){

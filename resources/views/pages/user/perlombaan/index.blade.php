@@ -4,6 +4,8 @@
 
 @section('content')
 
+
+
 @if ($data->tanggal_pendaftaran_ditutup < date('Y-m-d'))
     <section class="main-content">
         <div class="container-fluid">
@@ -22,9 +24,47 @@
                 </div>
             </div>
         </div>    
-    </section>    
+    </section>   
+    
+@elseif ($user->status_account == 'pending')
+<section class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Maaf!</strong> akun anda sedang dalam proses verifikasi.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@elseif ($user->status_account == 'ditolak')
+<section class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Maaf!</strong> akun anda ditolak. Karena <span>{{ $user->alasan_penolakan }}</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 @elseif ($peserta != null)
-{{-- make idcard --}}
 <section class="main-content">
     <div class="container-fluid">
         <div class="row">

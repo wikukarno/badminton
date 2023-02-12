@@ -65,7 +65,7 @@ class PerlombaanUserController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('pages.user.perlombaan.index', compact('data', 'peserta'));
+        return view('pages.user.perlombaan.index', compact('data', 'peserta', 'user'));
     }
 
     /**
