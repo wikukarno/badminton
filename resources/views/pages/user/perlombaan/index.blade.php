@@ -5,27 +5,44 @@
 @section('content')
 
 
-
-@if ($data->tanggal_pendaftaran_ditutup < date('Y-m-d') ?? '')
-    <section class="main-content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Maaf!</strong> Pendaftaran perlombaan ini telah ditutup.
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
+@if ($data == null)
+<section class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Maaf!</strong> Data perlombaan belum tersedia.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>    
-    </section>   
-    
+        </div>
+    </div>
+</section>
+@elseif ($data->tanggal_pendaftaran_ditutup < date('Y-m-d'))
+<section class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Maaf!</strong> Pendaftaran perlombaan ini telah ditutup.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</section>   
 @elseif ($user->status_account == 'pending')
 <section class="main-content">
     <div class="container-fluid">
