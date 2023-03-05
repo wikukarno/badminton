@@ -6,7 +6,7 @@
 
 
 
-@if ($data->tanggal_pendaftaran_ditutup < date('Y-m-d'))
+@if ($data->tanggal_pendaftaran_ditutup < date('Y-m-d') ?? '')
     <section class="main-content">
         <div class="container-fluid">
             <div class="row">
