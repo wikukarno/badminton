@@ -45,8 +45,8 @@ Route::prefix('pages/admin')
         Route::resource('berita', BeritaController::class);
 
         // Perlombaan
-        // Route::get('/perlombaan', [PerlombaanController::class, 'index'])->name('0.perlombaan');
-        // Route::post('/tambah/perlombaan', [PerlombaanController::class, 'store'])->name('0.perlombaan.store');
+        Route::get('/perlombaan', [PerlombaanController::class, 'index'])->name('0.perlombaan');
+        Route::post('/tambah/perlombaan', [PerlombaanController::class, 'store'])->name('0.perlombaan.store');
         Route::post('/show/perlombaan', [PerlombaanController::class, 'show'])->name('0.show.perlombaan');
         Route::post('/update/perlombaan', [PerlombaanController::class, 'update'])->name('0.update.perlombaan');
         Route::post('/hapus/perlombaan', [PerlombaanController::class, 'destroy'])->name('0.delete.perlombaan');
@@ -88,4 +88,3 @@ Route::prefix('pages/user')
 
 Auth::routes();
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
