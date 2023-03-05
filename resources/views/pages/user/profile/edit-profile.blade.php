@@ -132,7 +132,7 @@ Update Profile {{ Auth::user()->name }}
                                 <div class="row">
                                     <div class="col-12 col-lg-6">
                                         <div class="form-group">
-                                            <label for="ktp">Foto KTP</label>
+                                            <label for="ktp">Foto KTP / Pelajar</label>
                                             <input type="file" class="form-control" id="ktp" name="ktp">
                                         </div>
                                     </div>
@@ -164,7 +164,7 @@ Update Profile {{ Auth::user()->name }}
                                 </div>
                                 <div class="row">
                                     <div class="col-12 col-lg-6">
-                                        <a href="{{ route('akun-admin.index') }}"
+                                        <a href="{{ route('akun.index') }}"
                                             class="btn btn-danger btn-block mb-3">Batal</a>
                                     </div>
                                     <div class="col-12 col-lg-6">
