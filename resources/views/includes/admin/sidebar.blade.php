@@ -37,6 +37,11 @@
                     <span>Berita</span></a>
             </li>
 
+            <li class="{{ (request()->is('pages/admin/pengurus') ? 'active' : '') }}">
+            <a href="{{ route('pengurus.index') }}" class="nav-link"><i class="fas fa-users"></i>
+                    <span>Pengurus</span></a>
+            </li>
+
             <li class="{{ (request()->is('pages/admin/pengguna') ? 'active' : '') }}">
                 <a href="{{ route('0.pengguna') }}" class="nav-link"><i class="fas fa-users"></i>
                     <span>Data Pengguna</span></a>

@@ -45,15 +45,19 @@ Update Profile {{ Auth::user()->name }}
                                     <div class="col-12 col-lg-6">
                                         <div class="form-group">
                                             <label for="phone">Nomor Telepon</label>
-                                            <input type="text" class="form-control" id="phone" name="phone"
+                                            <input type="number" class="form-control" id="phone" name="phone"
                                                 value="{{ $user->phone ?? '' }}">
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-6">
                                         <div class="form-group">
                                             <label for="jenis_kelamin">Jenis Kelamin</label>
-                                            <input type="text" class="form-control" name="jenis_kelamin"
-                                                value="{{ $user->jenis_kelamin ?? '' }}">
+                                            <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
+                                                <option value="Laki-laki" @if (Auth::user()->jenis_kelamin == 'Laki-laki')
+                                                    selected @endif>Laki-laki</option>
+                                                <option value="Perempuan" @if (Auth::user()->jenis_kelamin == 'Perempuan')
+                                                    selected @endif>Perempuan</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -109,8 +113,45 @@ Update Profile {{ Auth::user()->name }}
                                     <div class="col-12 col-lg-4">
                                         <div class="form-group">
                                             <label for="kabupaten">Kabupaten</label>
-                                            <input type="text" class="form-control" id="kabupaten" name="kabupaten"
-                                                value="{{ $user->kabupaten ?? '' }}">
+                                            <select class="form-control" id="agama" name="agama">
+                                                <option value="Bengkalis" @if (Auth::user()->kabupaten == 'Bengkalis') selected @endif>
+                                                    Bengkalis
+                                                </option>
+                                                <option value="Indragiri Hilir" @if (Auth::user()->kabupaten == 'Indragiri Hilir') selected @endif>
+                                                    Indragiri Hilir
+                                                </option>
+                                                <option value="Indragiri Hulu" @if (Auth::user()->kabupaten == 'Indragiri Hulu') selected @endif>
+                                                    Indragiri Hulu
+                                                </option>
+                                                <option value="Kampar" @if (Auth::user()->kabupaten == 'Kampar') selected @endif>
+                                                    Kampar
+                                                </option>
+                                                <option value="Kepulauan Meranti" @if (Auth::user()->kabupaten == 'Kepulauan Meranti') selected @endif>
+                                                    Kepulauan Meranti
+                                                </option>
+                                                <option value="Kuantan Singingi" @if (Auth::user()->kabupaten == 'Kuantan Singingi') selected @endif>
+                                                    Kuantan Singingi
+                                                </option>
+                                                <option value="Pelalawan" @if (Auth::user()->kabupaten == 'Pelalawan') selected @endif>
+                                                    Pelalawan
+                                                </option>
+                                                <option value="Rokan Hilir" @if (Auth::user()->kabupaten == 'Rokan Hilir') selected @endif>
+                                                    Rokan Hilir
+                                                </option>
+                                                <option value="Rokan Hulu" @if (Auth::user()->kabupaten == 'Rokan Hulu') selected @endif>
+                                                    Rokan Hulu
+                                                </option>
+                                                <option value="Siak" @if (Auth::user()->kabupaten == 'Siak') selected @endif>
+                                                    Siak
+                                                </option>
+                                                <option value="Dumai" @if (Auth::user()->kabupaten == 'Dumai') selected @endif>
+                                                    Dumai
+                                                </option>
+                                                <option value="Pekanbaru" @if (Auth::user()->kabupaten == 'Pekanbaru') selected @endif>
+                                                    Pekanbaru
+                                                </option>
+                                            </select>
+                                                
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4">

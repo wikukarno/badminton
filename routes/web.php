@@ -3,13 +3,16 @@
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\PenggunaController;
+use App\Http\Controllers\Admin\PengurusController;
 use App\Http\Controllers\Admin\PerlombaanController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\VerifikasiPenggunaController;
 use App\Http\Controllers\Admin\WasitController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PerlombaanUserController;
 use App\Http\Controllers\ProfileUserController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +30,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/atlet', [HomeController::class, 'atlet']);
+Route::get('/wasit', [HomeController::class, 'wasit']);
+Route::get('/pengurus', [HomeController::class, 'pengurus']);
+
 
 Route::prefix('pages/admin')
     ->middleware(['auth', 'admin'])
@@ -57,10 +65,14 @@ Route::prefix('pages/admin')
         Route::post('/verifikasi', [VerifikasiPenggunaController::class, 'update'])->name('0.verifikasi');
         Route::post('/verifikasi/tolak', [VerifikasiPenggunaController::class, 'tolakVerifikasi'])->name('0.tolak.verifikasi');
 
+        Route::post('/pengurus/hapus', [PengurusController::class, 'destroy'])->name('0.hapus.pengurus');
+
+
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('0.pengguna');
         Route::post('/pengguna/blokir', [PenggunaController::class, 'blokir'])->name('0.blokir.pengguna');
         
         Route::resource('akun-admin', ProfileController::class);
+        Route::resource('pengurus', PengurusController::class);
     });
 
 Route::prefix('pages/user')
