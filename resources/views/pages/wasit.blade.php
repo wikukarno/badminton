@@ -44,7 +44,7 @@
         columns: [
             { data: 'DT_RowIndex', name: 'id' },
             { data: 'email', name: 'email' },
-            { data: 'name', name: 'name' },
+            { data: 'nama', name: 'nama' },
             { data: 'phone', name: 'phone' },
         ],
     });

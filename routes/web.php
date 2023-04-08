@@ -34,6 +34,8 @@ Route::get('/', function () {
 Route::get('/atlet', [HomeController::class, 'atlet']);
 Route::get('/wasit', [HomeController::class, 'wasit']);
 Route::get('/pengurus', [HomeController::class, 'pengurus']);
+Route::get('/berita', [HomeController::class, 'berita'])->name('berita');
+Route::get('/berita/{slug}', [HomeController::class, 'detailBerita'])->name('detail-berita');
 
 
 Route::prefix('pages/admin')

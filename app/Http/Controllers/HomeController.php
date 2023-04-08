@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Berita;
 use App\Models\Pengurus;
 use App\Models\User;
 use App\Models\Wasit;
@@ -75,5 +76,17 @@ class HomeController extends Controller
                 ->make(true);
         }
         return view('pages.pengurus');
+    }
+
+    public function berita()
+    {
+        $items = Berita::all();
+        return view('pages.berita', compact('items'));
+    }
+
+    public function detailBerita($slug)
+    {
+        $item = Berita::where('slug', $slug)->firstOrFail();
+        return view('pages.detail-berita', compact('item'));
     }
 }
