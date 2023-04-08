@@ -8,7 +8,7 @@
         <div class="col-12 col-lg-12">
             <h3><b>Berita</b></h3>
             <div class="row mt-5">
-                @foreach ($items as $item)
+                @forelse ($items as $item)
                     <div class="col-12 col-lg-4">
                         <figure class="figure">
                             <img src="{{ Storage::url($item->gambar) }}" class="figure-img img-fluid rounded" alt="...">
@@ -18,7 +18,16 @@
                                 </div>
                         </figure>
                     </div>
-                @endforeach
+                @empty
+                
+                <div class="col-12 col-lg-12 text-center">
+                    <figure class="figure">
+                        <img src="{{ asset('assets/images/empty.svg') }}" class="img-fluid" alt="empty">
+                        <h3 class="text-center">Tidak ada berita!</h3>
+                    </figure>
+                </div>
+
+                @endforelse
             </div>
         </div>
     </div>
@@ -39,10 +48,7 @@
                     $(this).text(content + '...');
                 }
 
-                
-
-                // make link selengkapnya
-                $(this).append('<a href="{{ route('detail-berita', $item->slug) }}">Selengkapnya</a>');
+                $(this).append('<a href="{{ route('detail-berita', $item->slug ?? '') }}">Selengkapnya</a>');
             });
         });
     </script>
