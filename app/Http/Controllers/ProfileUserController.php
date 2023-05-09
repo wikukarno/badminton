@@ -73,8 +73,8 @@ class ProfileUserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = User::findOrFail($id);
         $data = $request->all();
+        $item = User::findOrFail($id);
 
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('assets/profile', 'public');

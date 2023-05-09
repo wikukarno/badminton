@@ -48,13 +48,13 @@ Profile {{ Auth::user()->name }}
                                     <div class="col-12 col-lg-6">
                                         <div class="form-group">
                                             <label for="phone">Nomor Telepon</label>
-                                            <input type="text" class="form-control" id="phone" name="phone" value="{{ $users->phone ?? '' }}" readonly>
+                                            <input type="text" class="form-control" id="phone" name="phone" value="{{ Auth::user()->phone ?? '' }}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-6">
                                         <div class="form-group">
                                             <label for="jenis_kelamin">Jenis Kelamin</label>
-                                            <input type="text" class="form-control" value="{{ $users->jenis_kelamin ?? '' }}" readonly>
+                                            <input type="text" class="form-control" value="{{ Auth::user()->jenis_kelamin ?? '' }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -65,14 +65,14 @@ Profile {{ Auth::user()->name }}
                                             <label for="tempat_lahir">Tempat Lahir</label>
                                             <input type="text" class="form-control" id="tempat_lahir"
                                                 name="tempat_lahir"
-                                                value="{{ $users->tempat_lahir ?? '' }}" readonly>
+                                                value="{{ Auth::user()->tempat_lahir ?? '' }}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-6">
                                         <div class="form-group">
                                             <label for="tanggal_lahir">Tanggal Lahir</label>
                                             <input type="text" class="form-control" id="tanggal_lahir" name="tanggal_lahir"
-                                                value="{{ $users->tanggal_lahir ?? '' }}" readonly>
+                                                value="{{ Auth::user()->tanggal_lahir ?? '' }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -82,13 +82,13 @@ Profile {{ Auth::user()->name }}
                                         <div class="form-group">
                                             <label for="pekerjaan">Pekerjaan</label>
                                             <input type="text" class="form-control" id="pekerjaan" name="pekerjaan"
-                                                value="{{ $users->pekerjaan ?? '' }}" readonly>
+                                                value="{{ Auth::user()->pekerjaan ?? '' }}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-6">
                                         <div class="form-group">
                                             <label for="agama">Agama</label>
-                                            <input type="text" class="form-control" id="agama" name="agama" value="{{ $users->agama ?? '' }}" readonly>
+                                            <input type="text" class="form-control" id="agama" name="agama" value="{{ Auth::user()->agama ?? '' }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -97,21 +97,21 @@ Profile {{ Auth::user()->name }}
                                         <div class="form-group">
                                             <label for="kabupaten">Kabupaten</label>
                                             <input type="text" class="form-control" id="kabupaten" name="kabupaten"
-                                                value="{{ $users->kabupaten ?? '' }}" readonly>
+                                                value="{{ Auth::user()->kabupaten ?? '' }}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4">
                                         <div class="form-group">
                                             <label for="kecamatan">Kecamatan</label>
                                             <input type="text" class="form-control" id="kecamatan" name="kecamatan"
-                                                value="{{ $users->kecamatan ?? '' }}" readonly>
+                                                value="{{ Auth::user()->kecamatan ?? '' }}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4">
                                         <div class="form-group">
                                             <label for="desa">Desa</label>
                                             <input type="text" class="form-control" id="desa" name="desa"
-                                                value="{{ $users->desa ?? '' }}" readonly>
+                                                value="{{ Auth::user()->desa ?? '' }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@ Profile {{ Auth::user()->name }}
                                         <div class="form-group">
                                             <label for="alamat">Alamat</label>
                                             <input type="text" class="form-control"
-                                                value="{{ $users->alamat ?? '' }}" readonly>
+                                                value="{{ Auth::user()->alamat ?? '' }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -130,7 +130,7 @@ Profile {{ Auth::user()->name }}
                                             class="btn btn-danger btn-block mb-3">Kembali</a>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <a href="{{ route('akun-admin.edit', $users->id) }}"
+                                        <a href="{{ route('akun-admin.edit', Auth::user()->id) }}"
                                             class="btn btn-success btn-block mb-3">Update Akun</a>
                                     </div>
                                 </div>

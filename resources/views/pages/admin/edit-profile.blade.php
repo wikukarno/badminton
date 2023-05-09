@@ -37,7 +37,7 @@ Update Profile {{ Auth::user()->name }}
                         </p>
 
                         <section class="section-profile-content">
-                            <form action="{{ route('akun-admin.update', $user->id) }}" method="POST"
+                            <form action="{{ route('akun-admin.update', Auth::user()->id) }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
@@ -46,14 +46,14 @@ Update Profile {{ Auth::user()->name }}
                                         <div class="form-group">
                                             <label for="phone">Nomor Telepon</label>
                                             <input type="text" class="form-control" id="phone" name="phone"
-                                                value="{{ $user->phone ?? '' }}">
+                                                value="{{ Auth::user()->phone ?? '' }}">
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-6">
                                         <div class="form-group">
                                             <label for="jenis_kelamin">Jenis Kelamin</label>
                                             <input type="text" class="form-control" name="jenis_kelamin"
-                                                value="{{ $user->jenis_kelamin ?? '' }}">
+                                                value="{{ Auth::user()->jenis_kelamin ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -63,14 +63,14 @@ Update Profile {{ Auth::user()->name }}
                                         <div class="form-group">
                                             <label for="tempat_lahir">Tempat Lahir</label>
                                             <input type="text" class="form-control" id="tempat_lahir"
-                                                name="tempat_lahir" value="{{ $user->tempat_lahir ?? '' }}">
+                                                name="tempat_lahir" value="{{ Auth::user()->tempat_lahir ?? '' }}">
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-6">
                                         <div class="form-group">
                                             <label for="tanggal_lahir">Tanggal Lahir</label>
                                             <input type="date" class="form-control" id="tanggal_lahir"
-                                                name="tanggal_lahir" value="{{ $user->tanggal_lahir ?? '' }}">
+                                                name="tanggal_lahir" value="{{ Auth::user()->tanggal_lahir ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -80,7 +80,7 @@ Update Profile {{ Auth::user()->name }}
                                         <div class="form-group">
                                             <label for="pekerjaan">Pekerjaan</label>
                                             <input type="text" class="form-control" id="pekerjaan" name="pekerjaan"
-                                                value="{{ $user->pekerjaan ?? '' }}">
+                                                value="{{ Auth::user()->pekerjaan ?? '' }}">
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-6">
@@ -110,21 +110,21 @@ Update Profile {{ Auth::user()->name }}
                                         <div class="form-group">
                                             <label for="kabupaten">Kabupaten</label>
                                             <input type="text" class="form-control" id="kabupaten" name="kabupaten"
-                                                value="{{ $user->kabupaten ?? '' }}">
+                                                value="{{ Auth::user()->kabupaten ?? '' }}">
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4">
                                         <div class="form-group">
                                             <label for="kecamatan">Kecamatan</label>
                                             <input type="text" class="form-control" id="kecamatan" name="kecamatan"
-                                                value="{{ $user->kecamatan ?? '' }}">
+                                                value="{{ Auth::user()->kecamatan ?? '' }}">
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-4">
                                         <div class="form-group">
                                             <label for="desa">Desa</label>
                                             <input type="text" class="form-control" id="desa" name="desa"
-                                                value="{{ $user->desa ?? '' }}">
+                                                value="{{ Auth::user()->desa ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -157,7 +157,7 @@ Update Profile {{ Auth::user()->name }}
                                     <div class="col-12 col-lg-12">
                                         <div class="form-group">
                                             <label for="alamat">Alamat</label>
-                                            <input type="text" class="form-control" value="{{ $user->alamat ?? '' }}"
+                                            <input type="text" class="form-control" value="{{ Auth::user()->alamat ?? '' }}"
                                                 name="alamat">
                                         </div>
                                     </div>

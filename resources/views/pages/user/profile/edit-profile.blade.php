@@ -113,7 +113,7 @@ Update Profile {{ Auth::user()->name }}
                                     <div class="col-12 col-lg-4">
                                         <div class="form-group">
                                             <label for="kabupaten">Kabupaten</label>
-                                            <select class="form-control" id="agama" name="agama">
+                                            <select class="form-control" id="kabupaten" name="kabupaten">
                                                 <option value="Bengkalis" @if (Auth::user()->kabupaten == 'Bengkalis') selected @endif>
                                                     Bengkalis
                                                 </option>
