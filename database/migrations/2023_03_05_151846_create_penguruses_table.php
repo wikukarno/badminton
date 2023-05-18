@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('penguruses', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
-            $table->string('name');
-            $table->string('phone')->nullable();
+            $table->string('email', 30);
+            $table->string('name', 30);
+            $table->string('phone', 12)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

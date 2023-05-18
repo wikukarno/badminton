@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('wasits', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('email');
-            $table->string('phone');
-            $table->string('status');
-            $table->string('photo');
-            $table->string('alamat');
+            $table->string('nama', 30);
+            $table->string('email', 30);
+            $table->string('phone', 12);
+            $table->string('status', 30);
+            $table->longText('photo');
+            $table->longText('alamat');
             $table->timestamps();
             $table->softDeletes();
         });

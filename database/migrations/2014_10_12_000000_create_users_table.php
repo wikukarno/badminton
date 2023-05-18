@@ -15,27 +15,27 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('role')->default('1');
-            $table->string('phone')->nullable();
-            $table->string('jenis_kelamin')->nullable();
-            $table->string('tempat_lahir')->nullable();
-            $table->string('tanggal_lahir')->nullable();
-            $table->string('pekerjaan')->nullable();
-            $table->string('agama')->nullable();
-            $table->string('kabupaten')->nullable();
-            $table->string('kecamatan')->nullable();
-            $table->string('desa')->nullable();
-            $table->string('alamat')->nullable();
-            $table->string('photo')->nullable();
+            $table->string('name', 30);
+            $table->string('email', 30)->unique();
+            $table->string('role', 12)->default('1');
+            $table->string('phone', 12)->nullable();
+            $table->string('jenis_kelamin', 12)->nullable();
+            $table->string('tempat_lahir', 30)->nullable();
+            $table->date('tanggal_lahir')->nullable();
+            $table->string('pekerjaan', 30)->nullable();
+            $table->string('agama', 30)->nullable();
+            $table->string('kabupaten', 30)->nullable();
+            $table->string('kecamatan', 30)->nullable();
+            $table->string('desa', 30)->nullable();
+            $table->longText('alamat')->nullable();
+            $table->longText('photo')->nullable();
             $table->enum('status_account', ['pending', 'aktif', 'nonaktif', 'ditolak'])->default('pending');
-            $table->string('ktp')->nullable();
-            $table->string('kk')->nullable();
-            $table->string('alasan_penolakan')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->longText('ktp')->nullable();
+            $table->longText('kk')->nullable();
+            $table->longText('alasan_penolakan')->nullable();
+            $table->timestamp('email_verified_at')->nullable(); // email_verified don't make the default value because it time
+            $table->longText('password');
+            $table->rememberToken(); // remember token don't make the default value
             $table->timestamps();
             $table->softDeletes();
         });

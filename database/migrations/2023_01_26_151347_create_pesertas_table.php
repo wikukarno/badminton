@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('pesertas', function (Blueprint $table) {
             $table->id();
-            $table->string('users_id');
-            $table->string('perlombaans_id');
-            $table->string('nama_teman')->nullable();
+            $table->string('users_id', 12);
+            $table->string('perlombaans_id', 12);
+            $table->string('nama_teman', 30)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
