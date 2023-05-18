@@ -59,6 +59,29 @@
                             <textarea name="deskripsi_perlombaan" id="show_deskripsi_perlombaan" class="form-control" readonly></textarea>
                         </div>
                     </div>
+
+                    <div class="row mt-5">
+                        <div class="container">
+                            <div class="header-title">
+                                <h3>Daftar Peserta</h3>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <table id="tb_peserta" class="table table-hover scroll-horizontal-vertical w-100">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Profile</th>
+                                        <th>Email</th>
+                                        <th>Nama</th>
+                                        <th>Nomor HP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

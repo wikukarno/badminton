@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Perlombaan;
+use App\Models\Peserta;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PerlombaanController extends Controller
@@ -33,15 +36,17 @@ class PerlombaanController extends Controller
                 })
                 ->editColumn('action', function ($item) {
                     return '
-                        <a href="javascript:void(0)" class="btn btn-info btn-sm mb-3" onClick="btnShowPerlombaan(' . $item->id . ')">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <button class="btn btn-warning btn-sm mb-3" onClick="btnUpdatePerlombaan(' . $item->id . ')">
-                            <i class="fas fa-pencil-alt"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-sm mb-3" onClick="btnDeletePerlombaan(' . $item->id . ')">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <div class="d-flex">
+                            <a href="' . route('0.show.perlombaan', $item->id) . '" class="btn btn-info btn-sm mb-3 mx-1">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <button class="btn btn-warning btn-sm mb-3 mx-1" onClick="btnUpdatePerlombaan(' . $item->id . ')">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" onClick="btnDeletePerlombaan(' . $item->id . ')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div> 
                     ';
                 })
 
@@ -99,20 +104,34 @@ class PerlombaanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($id)
     {
-        if (request()->ajax()) {
-            $where = array('perlombaans.id' => $request->id);
-            $result = Perlombaan::where($where)->first();
-            if ($result) {
-                return Response()->json($result);
-            } else {
-                return Response()->json(['error' => 'Akun tidak ditemukan!']);
-            }
-        } else {
-            $result = (['status' => false, 'message' => 'Maaf, akses ditolak!']);
+        $data = Perlombaan::findOrFail($id);
+        if(request()->ajax()){
+            $data = Perlombaan::findOrFail($id);
+            $peserta = Peserta::with('user')->where('perlombaans_id', $data->id)->get();
+
+            return datatables()->of($peserta)
+                ->addIndexColumn()
+                ->editColumn('photo', function ($item) {
+                    return '<img src="' . Storage::url($item->user->photo) . '" alt="photo" style="width: 50px; height: 50px; object-fit: cover; object-position: center;" class="rounded-circle">';
+                })
+                ->editColumn('action', function ($item) {
+                    return '
+                        <div class="d-flex">
+                            <button class="btn btn-warning btn-sm mb-3 mx-1" onClick="btnUpdatePeserta(' . $item->id . ')">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" onClick="btnDeletePeserta(' . $item->id . ')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div> 
+                    ';
+                })
+                ->rawColumns(['action', 'photo'])
+                ->make(true);
         }
-        return Response()->json($result);
+        return view('pages.admin.perlombaan.show', compact('data'));
     }
 
     /**
@@ -155,4 +174,12 @@ class PerlombaanController extends Controller
             return Response()->json(['status' => false, 'message' => 'Data gagal dihapus!']);
         }
     }
+
+    public function showPerlombaan(Request $request)
+    {
+        $data = Perlombaan::findOrFail($request->id);
+        $perserta = Peserta::where('perlombaans_id', $data->id)->get();
+        return view('pages.admin.perlombaan.show', compact('data', 'perserta'));
+    }
+
 }

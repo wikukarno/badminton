@@ -50,6 +50,7 @@
         $('#tambahPerlombaanModal').modal('show');
         $('#form-tambah-perlombaan').trigger('reset');
         $('.modal-title').text('Tambah Perlombaan');
+        $('#btnSimpanPerlombaan').html('Simpan');
         $('#id_perlombaan').val('');
     }
 

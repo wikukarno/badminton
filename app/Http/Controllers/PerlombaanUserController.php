@@ -49,17 +49,20 @@ class PerlombaanUserController extends Controller
                     return Carbon::parse($item->tanggal_pendaftaran_ditutup)->isoFormat('D MMMM Y');
                 })
                 ->editColumn('action', function ($item) {
-                    return '
-                        <a href="'. route('perlombaan.show', $item->id) .'" class="btn btn-info btn-sm mb-3" >
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <button class="btn btn-warning btn-sm mb-3" onClick="btnUpdatePerlombaan(' . $item->id . ')">
-                            <i class="fas fa-pencil-alt"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-sm mb-3" onClick="btnDeletePerlombaan(' . $item->id . ')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    ';
+                    $peserta = Peserta::where('users_id', Auth::user()->id)->where('perlombaans_id', $item->id)->first();
+                    if($peserta != null){
+                        return '
+                            <span class="badge badge-success">
+                                Anda Sudah Terdaftar
+                            </span>
+                        ';
+                    }else{
+                        return '
+                            <a href="' . route('perlombaan.show', $item->id) . '" class="btn btn-info btn-sm mb-3" >
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        ';
+                    }
                 })
 
                 ->rawColumns(['action'])

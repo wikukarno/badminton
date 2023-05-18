@@ -81,7 +81,7 @@
         </div>
     </div>
 </section>
-@elseif ($peserta != null)
+{{-- @elseif ($peserta != null)
 <section class="main-content">
     <div class="container-fluid">
         <div class="row">
@@ -99,7 +99,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 @else
 <section class="main-content">
     <div class="container-fluid">

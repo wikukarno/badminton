@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('users_id');
             $table->string('perlombaans_id');
-            $table->string('nama_teman');
+            $table->string('nama_teman')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

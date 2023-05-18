@@ -30,15 +30,17 @@ class BeritaController extends Controller
                 })
                 ->editColumn('action', function ($item) {
                     return '
-                            <a href="'. route('berita.show', $item->id) .'" class="btn btn-info btn-sm btn-pill">
+                        <div class="d-flex">
+                            <a href="' . route('berita.show', $item->id) . '" class="btn btn-info btn-sm btn-pill mx-1">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a href="' . route('berita.edit', $item->id) . '" class="btn btn-secondary btn-sm btn-pill">
+                            <a href="' . route('berita.edit', $item->id) . '" class="btn btn-secondary btn-sm btn-pill mx-1">
                                 <i class="fa fa-pencil-alt"></i>
                             </a>
-                            <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-pill" onclick="deleteBlog(' . $item->id . ')">
+                            <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-pill mx-1" onclick="deleteBlog(' . $item->id . ')">
                                 <i class="fa fa-trash"></i>
                             </a>
+                        </div>
                     ';
                 })
                 ->rawColumns(['action'])->make(true);
@@ -155,9 +157,9 @@ class BeritaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $item = Berita::findOrFail($id);
+        $item = Berita::findOrFail($request->id);
         $item->delete();
 
         if($item){

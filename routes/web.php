@@ -45,11 +45,12 @@ Route::prefix('pages/admin')
 
         // Berita
         Route::resource('berita', BeritaController::class);
+        Route::post('/hapus/berita', [BeritaController::class, 'destroy'])->name('0.delete.berita');
 
         // Perlombaan
         Route::get('/perlombaan', [PerlombaanController::class, 'index'])->name('0.perlombaan');
         Route::post('/tambah/perlombaan', [PerlombaanController::class, 'store'])->name('0.perlombaan.store');
-        Route::post('/show/perlombaan', [PerlombaanController::class, 'show'])->name('0.show.perlombaan');
+        Route::get('/show/perlombaan/{id}', [PerlombaanController::class, 'show'])->name('0.show.perlombaan');
         Route::post('/update/perlombaan', [PerlombaanController::class, 'update'])->name('0.update.perlombaan');
         Route::post('/hapus/perlombaan', [PerlombaanController::class, 'destroy'])->name('0.delete.perlombaan');
 

@@ -16,4 +16,9 @@ class Peserta extends Model
         'perlombaans_id',
         'nama_teman',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id', 'id');
+    }
 }

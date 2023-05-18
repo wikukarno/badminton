@@ -56,5 +56,45 @@
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ],
     });
+
+    function deleteBlog(id){
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type:'POST',
+                    url: "{{ url('/pages/admin/hapus/berita') }}",
+                    data: {
+                        id: id,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    dataType: 'json',
+                    success: (res) => {
+                            Swal.fire(
+                                'Berhasil!',
+                                'Data berhasil dihapus.',
+                                'success'
+                            )
+                            $('#tb_berita').DataTable().ajax.reload();
+                    },
+                    error: (err) => {
+                        Swal.fire(
+                            'Gagal!',
+                            'Data gagal dihapus.',
+                            'error'
+                        )
+                    }
+                });
+            }
+        })
+    }
 </script>
 @endpush
