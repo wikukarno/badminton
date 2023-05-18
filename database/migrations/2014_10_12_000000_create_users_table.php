@@ -33,9 +33,9 @@ return new class extends Migration
             $table->longText('ktp')->nullable();
             $table->longText('kk')->nullable();
             $table->longText('alasan_penolakan')->nullable();
-            $table->timestamp('email_verified_at')->nullable(); // email_verified don't make the default value because it time
+            // $table->timestamp('email_verified_at')->nullable(); // email_verified don't make the default value because it time
             $table->longText('password');
-            $table->rememberToken(); // remember token don't make the default value
+            // $table->rememberToken(); // remember token don't make the default value
             $table->timestamps();
             $table->softDeletes();
         });
