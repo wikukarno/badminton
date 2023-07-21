@@ -37,7 +37,7 @@ class PerlombaanController extends Controller
                 ->editColumn('action', function ($item) {
                     return '
                         <div class="d-flex">
-                            <a href="' . route('0.show.perlombaan', $item->id) . '" class="btn btn-info btn-sm mb-3 mx-1">
+                            <a href="' . route('0.show.perlombaan', $item->id) . '" target="_blank" class="btn btn-info btn-sm mb-3 mx-1">
                                 <i class="fas fa-eye"></i>
                             </a>
                             <button class="btn btn-warning btn-sm mb-3 mx-1" onClick="btnUpdatePerlombaan(' . $item->id . ')">
@@ -74,27 +74,34 @@ class PerlombaanController extends Controller
      */
     public function store(Request $request)
     {
-        $data = Perlombaan::updateOrCreate(
-            ['id' => $request->id],
-            [
-                'nama_perlombaan' => $request->nama_perlombaan,
-                'deskripsi_perlombaan' => $request->deskripsi_perlombaan,
-                'tanggal_pendaftaran_dibuka' => $request->tanggal_pendaftaran_dibuka,
-                'tanggal_pendaftaran_ditutup' => $request->tanggal_pendaftaran_ditutup,
-                'tanggal_pelaksanaan' => $request->tanggal_pelaksanaan,
-                'tempat_pelaksanaan' => $request->tempat_pelaksanaan,
-                'kategori_perlombaan' => $request->kategori_perlombaan,
-            ]
-        );
+        // Untuk validasi tanggal pendaftaran dibuka dan ditutup
+        $tanggal_pendaftaran_dibuka = Carbon::parse($request->tanggal_pendaftaran_dibuka)->format('Y-m-d');
+        $tanggal_pendaftaran_ditutup = Carbon::parse($request->tanggal_pendaftaran_ditutup)->format('Y-m-d');
 
-        if (!$data->wasRecentlyCreated && $data->wasChanged()) {
-            return Response()->json(['status' => true, 'message' => 'Data berhasil diubah!']);
-        }
-        if (!$data->wasRecentlyCreated && !$data->wasChanged()) {
-            return Response()->json(['status' => false, 'message' => 'Data tidak ada yang diubah!']);
-        }
-        if ($data->wasRecentlyCreated) {
-            return Response()->json(['status' => true, 'message' => 'Data berhasil ditambahkan!']);
+        if ($tanggal_pendaftaran_ditutup <= $tanggal_pendaftaran_dibuka) {
+            return Response()->json(['status' => false, 'message' => 'Tanggal pendaftaran ditutup tidak boleh kurang atau sama dengan tanggal pendaftaran dibuka!']);
+        } else {
+            $data = Perlombaan::updateOrCreate(
+                ['id' => $request->id],
+                [
+                    'nama_perlombaan' => $request->nama_perlombaan,
+                    'deskripsi_perlombaan' => $request->deskripsi_perlombaan,
+                    'tanggal_pendaftaran_dibuka' => $request->tanggal_pendaftaran_dibuka,
+                    'tanggal_pendaftaran_ditutup' => $request->tanggal_pendaftaran_ditutup,
+                    'tempat_pelaksanaan' => $request->tempat_pelaksanaan,
+                    'kategori_perlombaan' => $request->kategori_perlombaan,
+                ]
+            );
+
+            if (!$data->wasRecentlyCreated && $data->wasChanged()) {
+                return Response()->json(['status' => true, 'message' => 'Data berhasil diubah!']);
+            }
+            if (!$data->wasRecentlyCreated && !$data->wasChanged()) {
+                return Response()->json(['status' => false, 'message' => 'Data tidak ada yang diubah!']);
+            }
+            if ($data->wasRecentlyCreated) {
+                return Response()->json(['status' => true, 'message' => 'Data berhasil ditambahkan!']);
+            }
         }
     }
 
@@ -107,7 +114,7 @@ class PerlombaanController extends Controller
     public function show($id)
     {
         $data = Perlombaan::findOrFail($id);
-        if(request()->ajax()){
+        if (request()->ajax()) {
             $data = Perlombaan::findOrFail($id);
             $peserta = Peserta::with('user')->where('perlombaans_id', $data->id)->get();
 
@@ -152,9 +159,11 @@ class PerlombaanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $data = Perlombaan::findOrFail($request->id);
+
+        return Response()->json($data);
     }
 
     /**
@@ -181,5 +190,4 @@ class PerlombaanController extends Controller
         $perserta = Peserta::where('perlombaans_id', $data->id)->get();
         return view('pages.admin.perlombaan.show', compact('data', 'perserta'));
     }
-
 }
