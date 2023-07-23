@@ -53,6 +53,7 @@ Route::prefix('pages/admin')
         Route::get('/show/perlombaan/{id}', [PerlombaanController::class, 'show'])->name('0.show.perlombaan');
         Route::post('/update/perlombaan', [PerlombaanController::class, 'update'])->name('0.update.perlombaan');
         Route::post('/hapus/perlombaan', [PerlombaanController::class, 'destroy'])->name('0.delete.perlombaan');
+        Route::post('/create/random/pertandingan', [PerlombaanController::class, 'create_random_pertandingan'])->name('0.create.random.pertandingan');
 
         Route::resource('perlombaan-admin', PerlombaanController::class);
         // Wasit

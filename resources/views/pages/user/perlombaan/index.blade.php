@@ -24,7 +24,7 @@
         </div>
     </div>
 </section>
-@elseif ($data->tanggal_pendaftaran_ditutup < date('Y-m-d'))
+{{-- @elseif ($data->tanggal_pendaftaran_ditutup < date('Y-m-d'))
 <section class="main-content">
     <div class="container-fluid">
         <div class="row">
@@ -42,7 +42,7 @@
             </div>
         </div>
     </div>    
-</section>   
+</section>    --}}
 @elseif ($user->status_account == 'pending')
 <section class="main-content">
     <div class="container-fluid">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Perlombaan;
+use App\Models\Pertandingan;
 use App\Models\Peserta;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,9 +26,6 @@ class PerlombaanController extends Controller
 
             return datatables()->of($query)
                 ->addIndexColumn()
-                ->editColumn('tanggal_pelaksanaan', function ($item) {
-                    return Carbon::parse($item->tanggal_pelaksanaan)->isoFormat('D MMMM Y');
-                })
                 ->editColumn('tanggal_pendaftaran_dibuka', function ($item) {
                     return Carbon::parse($item->tanggal_pendaftaran_dibuka)->isoFormat('D MMMM Y');
                 })
@@ -35,19 +33,41 @@ class PerlombaanController extends Controller
                     return Carbon::parse($item->tanggal_pendaftaran_ditutup)->isoFormat('D MMMM Y');
                 })
                 ->editColumn('action', function ($item) {
-                    return '
-                        <div class="d-flex">
-                            <a href="' . route('0.show.perlombaan', $item->id) . '" target="_blank" class="btn btn-info btn-sm mb-3 mx-1">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <button class="btn btn-warning btn-sm mb-3 mx-1" onClick="btnUpdatePerlombaan(' . $item->id . ')">
-                                <i class="fas fa-pencil-alt"></i>
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" onClick="btnDeletePerlombaan(' . $item->id . ')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div> 
-                    ';
+                    $tanggal_pendaftaran_ditutup = Carbon::parse($item->tanggal_pendaftaran_ditutup)->format('Y-m-d');
+                    $tanggal_sekarang = Carbon::now()->format('Y-m-d');
+
+                    if ($tanggal_sekarang > $tanggal_pendaftaran_ditutup) {
+                        return '
+                            <div class="d-flex">
+                                <a href="' . route('0.show.perlombaan', $item->id) . '" title="Tampil Detail Perlombaan" target="_blank" class="btn btn-info btn-sm mb-3 mx-1">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="javascript:void(0);" title="Buat Jadwal Pertandingan Acak" class="btn btn-success btn-sm mb-3 mx-1" onClick="btnCreateRandomPertandingan(' . $item->id . ')">
+                                    <i class="fas fa-random"></i>
+                                </a>
+                                <button class="btn btn-warning btn-sm mb-3 mx-1" title="Update Perlombaan" onClick="btnUpdatePerlombaan(' . $item->id . ')">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" title="Hapus Perlombaan" onClick="btnDeletePerlombaan(' . $item->id . ')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div> 
+                        ';
+                    } else {
+                        return '
+                            <div class="d-flex">
+                                <a href="' . route('0.show.perlombaan', $item->id) . '" target="_blank" class="btn btn-info btn-sm mb-3 mx-1">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <button class="btn btn-warning btn-sm mb-3 mx-1" onClick="btnUpdatePerlombaan(' . $item->id . ')">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" onClick="btnDeletePerlombaan(' . $item->id . ')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div> 
+                        ';
+                    }
                 })
 
                 ->rawColumns(['action'])
@@ -102,6 +122,50 @@ class PerlombaanController extends Controller
             if ($data->wasRecentlyCreated) {
                 return Response()->json(['status' => true, 'message' => 'Data berhasil ditambahkan!']);
             }
+        }
+    }
+
+    // Buat jadwal pertandingan acak
+    public function create_random_pertandingan(Request $request)
+    {
+        $id_perlombaan = $request->id;
+        $data_perlombaan = Perlombaan::findOrFail($id_perlombaan);
+
+        // Cek jika kategori perlombaan adalah single
+        if ($data_perlombaan->kategori_perlombaan == 'Single') {
+            $data_peserta = Peserta::where('perlombaans_id', $id_perlombaan)->get();
+            $jumlah_peserta = count($data_peserta);
+
+            // Jika jumlah peserta kurang dari 2
+            if ($jumlah_peserta < 2) {
+                return Response()->json(['status' => false, 'message' => 'Jumlah peserta kurang dari 2!']);
+            } else {
+                $jumlah_pertandingan = 0;
+
+                // Jika jumlah peserta genap
+                if ($jumlah_peserta % 2 == 0) {
+                    $jumlah_pertandingan = $jumlah_peserta / 2;
+                    $data_pertandingan = [];
+
+                    for ($i = 0; $i < $jumlah_pertandingan; $i++) {
+                        $data_pertandingan[$i] = [
+                            'perlombaans_id' => $id_perlombaan,
+                            'pesertas_id_1' => $data_peserta[$i]->id,
+                            'pesertas_id_2' => $data_peserta[$i + 1]->id,
+                            'tanggal_jadwal' => Carbon::now()->format('Y-m-d H:i:s')
+                        ];
+                    }
+
+                    Pertandingan::insert($data_pertandingan);
+
+                    return Response()->json(['status' => true, 'message' => 'Jadwal pertandingan berhasil dibuat!']);
+                } else {
+                    // Jika jumlah peserta ganjil
+                    return Response()->json(['status' => false, 'message' => 'Jumlah peserta tidak boleh ganjil!']);
+                }
+            }
+        } else {
+            return Response()->json(['status' => false, 'message' => 'Untuk double masih dalam tahap pengembangan!']);
         }
     }
 

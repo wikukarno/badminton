@@ -23,7 +23,7 @@
                                         <tr>
                                             <th>No.</th>
                                             <th>Nama Perlombaan</th>
-                                            <th>Tanggal Pelaksanaan</th>
+                                            <th>Pendaftaran Dibuka</th>
                                             <th>Pendaftaran Ditutup</th>
                                             <th>Kategori Perlombaan</th>
                                             <th>Aksi</th>
@@ -148,6 +148,55 @@
             })
         }
 
+        // Fungsi untuk buat jadwal pertandingan secara random
+        function btnCreateRandomPertandingan(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Buat jadwal pertandingan secara random!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, buat!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url('/pages/admin/create/random/pertandingan') }}",
+                        data: {
+                            id: id,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        dataType: 'json',
+                        success: (res) => {
+                            if (res.status == true) {
+                                Swal.fire(
+                                    'Berhasil!',
+                                    'Pertandingan random berhasil dibuat.',
+                                    'success'
+                                )
+                                $('#tb_perlombaan').DataTable().ajax.reload();
+                            } else {
+                                Swal.fire(
+                                    'Gagal!',
+                                    res.message,
+                                    'error'
+                                )
+                            }
+                        },
+                        error: (err) => {
+                            Swal.fire(
+                                'Gagal!',
+                                err.responseJSON.message,
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        }
+
         $('#form-tambah-perlombaan').submit(function(e) {
             e.preventDefault();
             var formData = new FormData(this);
@@ -177,7 +226,7 @@
                     } else {
                         $('#btnSimpanPerlombaan').attr('disabled', false);
                         $('#btnSimpanPerlombaan').html('Simpan');
-                        
+
                         failedNotifikasi(res.message);
                     }
                 },
