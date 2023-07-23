@@ -34,14 +34,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 col-lg-12">
-                            <div class="form-group">
-                                <label for="tanggal">Tanggal Perlombaan</label>
-                                <input type="date" name="tanggal_pelaksanaan" id="show_tanggal_pelaksanaan" class="form-control" readonly>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-12 col-lg-6 mb-3">
                             <label for="tempat">Tempat Perlombaan</label>
                             <input type="text" name="tempat_pelaksanaan" id="show_tempat_pelaksanaan" class="form-control"
