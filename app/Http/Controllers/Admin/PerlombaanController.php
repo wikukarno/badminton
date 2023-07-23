@@ -133,30 +133,47 @@ class PerlombaanController extends Controller
 
         // Cek jika kategori perlombaan adalah single
         if ($data_perlombaan->kategori_perlombaan == 'Single') {
-            $data_peserta = Peserta::where('perlombaans_id', $id_perlombaan)->get();
+            $data_peserta = Peserta::where('perlombaans_id', $id_perlombaan)->get()->toArray();
             $jumlah_peserta = count($data_peserta);
 
             // Jika jumlah peserta kurang dari 2
             if ($jumlah_peserta < 2) {
                 return Response()->json(['status' => false, 'message' => 'Jumlah peserta kurang dari 2!']);
             } else {
-                $jumlah_pertandingan = 0;
-
                 // Jika jumlah peserta genap
                 if ($jumlah_peserta % 2 == 0) {
-                    $jumlah_pertandingan = $jumlah_peserta / 2;
-                    $data_pertandingan = [];
+                    // Acak array data_peserta untuk mengacak urutan peserta, sehingga unik urutannya
+                    shuffle($data_peserta);
 
-                    for ($i = 0; $i < $jumlah_pertandingan; $i++) {
-                        $data_pertandingan[$i] = [
-                            'perlombaans_id' => $id_perlombaan,
-                            'pesertas_id_1' => $data_peserta[$i]->id,
-                            'pesertas_id_2' => $data_peserta[$i + 1]->id,
-                            'tanggal_jadwal' => Carbon::now()->format('Y-m-d H:i:s')
-                        ];
+                    // Buat pasangan untuk pertandingannya
+                    $pair_count = $jumlah_peserta / 2;
+
+                    // Dapatkan tanggal_pendaftaran_ditutup dari data perlombaan
+                    $tanggal_pendaftaran_ditutup = Carbon::parse($data_perlombaan->tanggal_pendaftaran_ditutup);
+
+                    // Kalkulasi tanggal mulai dan tanggal selesai berdasarkan 'tanggal_pendaftaran_ditutup'
+                    $start_date = $tanggal_pendaftaran_ditutup->addDay(1);
+                    $end_date = $start_date->addDay($pair_count - 1);
+
+                    for ($i = 0; $i < $pair_count; $i++) {
+                        $index1 = $i * 2;
+                        $index2 = $index1 + 1;
+
+                        // Cek jika index2 berada dalam batas array
+                        if (isset($data_peserta[$index2])) {
+                            // Generate random tanggal_jadwal between the calculated date range
+                            // Buat tanggal jadwal secara acak antara tanggal mulai dan tanggal selesai
+                            $random_date = Carbon::createFromTimestamp(rand($start_date->timestamp, $end_date->timestamp));
+
+                            // Simpan pasangan pertandingannya ke tabel pertandingans
+                            Pertandingan::create([
+                                'perlombaans_id' => $id_perlombaan,
+                                'pesertas_id_1' => $data_peserta[$index1]['users_id'],
+                                'pesertas_id_2' => $data_peserta[$index2]['users_id'],
+                                'tanggal_jadwal' => $random_date->format('Y-m-d H:i:s')
+                            ]);
+                        }
                     }
-
-                    Pertandingan::insert($data_pertandingan);
 
                     return Response()->json(['status' => true, 'message' => 'Jadwal pertandingan berhasil dibuat!']);
                 } else {
