@@ -35,24 +35,44 @@ class PerlombaanController extends Controller
                 ->editColumn('action', function ($item) {
                     $tanggal_pendaftaran_ditutup = Carbon::parse($item->tanggal_pendaftaran_ditutup)->format('Y-m-d');
                     $tanggal_sekarang = Carbon::now()->format('Y-m-d');
+                    $cek_pertandingan_exists = Pertandingan::where('perlombaans_id', $item->id)->count();
 
                     if ($tanggal_sekarang > $tanggal_pendaftaran_ditutup) {
-                        return '
-                            <div class="d-flex">
-                                <a href="' . route('0.show.perlombaan', $item->id) . '" title="Tampil Detail Perlombaan" target="_blank" class="btn btn-info btn-sm mb-3 mx-1">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="javascript:void(0);" title="Buat Jadwal Pertandingan Acak" class="btn btn-success btn-sm mb-3 mx-1" onClick="btnCreateRandomPertandingan(' . $item->id . ')">
-                                    <i class="fas fa-random"></i>
-                                </a>
-                                <button class="btn btn-warning btn-sm mb-3 mx-1" title="Update Perlombaan" onClick="btnUpdatePerlombaan(' . $item->id . ')">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </button>
-                                <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" title="Hapus Perlombaan" onClick="btnDeletePerlombaan(' . $item->id . ')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div> 
-                        ';
+                        if ($cek_pertandingan_exists > 0) {
+                            return '
+                                <div class="d-flex">
+                                    <a href="' . route('0.show.perlombaan', $item->id) . '" title="Tampil Detail Perlombaan" target="_blank" class="btn btn-info btn-sm mb-3 mx-1">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <button type="button" title="Buat Jadwal Pertandingan Acak" class="btn btn-success btn-sm mb-3 mx-1" disabled>
+                                        <i class="fas fa-random"></i>
+                                    </button>
+                                    <button class="btn btn-warning btn-sm mb-3 mx-1" title="Update Perlombaan" onClick="btnUpdatePerlombaan(' . $item->id . ')">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" title="Hapus Perlombaan" onClick="btnDeletePerlombaan(' . $item->id . ')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div> 
+                            ';
+                        } else {
+                            return '
+                                <div class="d-flex">
+                                    <a href="' . route('0.show.perlombaan', $item->id) . '" title="Tampil Detail Perlombaan" target="_blank" class="btn btn-info btn-sm mb-3 mx-1">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="javascript:void(0);" title="Buat Jadwal Pertandingan Acak" class="btn btn-success btn-sm mb-3 mx-1" onClick="btnCreateRandomPertandingan(' . $item->id . ')">
+                                        <i class="fas fa-random"></i>
+                                    </a>
+                                    <button class="btn btn-warning btn-sm mb-3 mx-1" title="Update Perlombaan" onClick="btnUpdatePerlombaan(' . $item->id . ')">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" title="Hapus Perlombaan" onClick="btnDeletePerlombaan(' . $item->id . ')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div> 
+                            ';
+                        }
                     } else {
                         return '
                             <div class="d-flex">
