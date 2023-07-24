@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Perlombaan;
+use App\Models\Pertandingan;
 use App\Models\Peserta;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,9 +26,6 @@ class PerlombaanController extends Controller
 
             return datatables()->of($query)
                 ->addIndexColumn()
-                ->editColumn('tanggal_pelaksanaan', function ($item) {
-                    return Carbon::parse($item->tanggal_pelaksanaan)->isoFormat('D MMMM Y');
-                })
                 ->editColumn('tanggal_pendaftaran_dibuka', function ($item) {
                     return Carbon::parse($item->tanggal_pendaftaran_dibuka)->isoFormat('D MMMM Y');
                 })
@@ -35,19 +33,61 @@ class PerlombaanController extends Controller
                     return Carbon::parse($item->tanggal_pendaftaran_ditutup)->isoFormat('D MMMM Y');
                 })
                 ->editColumn('action', function ($item) {
-                    return '
-                        <div class="d-flex">
-                            <a href="' . route('0.show.perlombaan', $item->id) . '" class="btn btn-info btn-sm mb-3 mx-1">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <button class="btn btn-warning btn-sm mb-3 mx-1" onClick="btnUpdatePerlombaan(' . $item->id . ')">
-                                <i class="fas fa-pencil-alt"></i>
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" onClick="btnDeletePerlombaan(' . $item->id . ')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div> 
-                    ';
+                    $tanggal_pendaftaran_ditutup = Carbon::parse($item->tanggal_pendaftaran_ditutup)->format('Y-m-d');
+                    $tanggal_sekarang = Carbon::now()->format('Y-m-d');
+                    $cek_pertandingan_exists = Pertandingan::where('perlombaans_id', $item->id)->count();
+
+                    if ($tanggal_sekarang > $tanggal_pendaftaran_ditutup) {
+                        if ($cek_pertandingan_exists > 0) {
+                            return '
+                                <div class="d-flex">
+                                    <a href="' . route('0.show.perlombaan', $item->id) . '" title="Tampil Detail Perlombaan" target="_blank" class="btn btn-info btn-sm mb-3 mx-1">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <button type="button" title="Buat Jadwal Pertandingan Acak" class="btn btn-success btn-sm mb-3 mx-1" disabled>
+                                        <i class="fas fa-random"></i>
+                                    </button>
+                                    <button class="btn btn-warning btn-sm mb-3 mx-1" title="Update Perlombaan" onClick="btnUpdatePerlombaan(' . $item->id . ')">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" title="Hapus Perlombaan" onClick="btnDeletePerlombaan(' . $item->id . ')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div> 
+                            ';
+                        } else {
+                            return '
+                                <div class="d-flex">
+                                    <a href="' . route('0.show.perlombaan', $item->id) . '" title="Tampil Detail Perlombaan" target="_blank" class="btn btn-info btn-sm mb-3 mx-1">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="javascript:void(0);" title="Buat Jadwal Pertandingan Acak" class="btn btn-success btn-sm mb-3 mx-1" onClick="btnCreateRandomPertandingan(' . $item->id . ')">
+                                        <i class="fas fa-random"></i>
+                                    </a>
+                                    <button class="btn btn-warning btn-sm mb-3 mx-1" title="Update Perlombaan" onClick="btnUpdatePerlombaan(' . $item->id . ')">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" title="Hapus Perlombaan" onClick="btnDeletePerlombaan(' . $item->id . ')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div> 
+                            ';
+                        }
+                    } else {
+                        return '
+                            <div class="d-flex">
+                                <a href="' . route('0.show.perlombaan', $item->id) . '" target="_blank" class="btn btn-info btn-sm mb-3 mx-1">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <button class="btn btn-warning btn-sm mb-3 mx-1" onClick="btnUpdatePerlombaan(' . $item->id . ')">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm mb-3 mx-1" onClick="btnDeletePerlombaan(' . $item->id . ')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div> 
+                        ';
+                    }
                 })
 
                 ->rawColumns(['action'])
@@ -74,27 +114,145 @@ class PerlombaanController extends Controller
      */
     public function store(Request $request)
     {
-        $data = Perlombaan::updateOrCreate(
-            ['id' => $request->id],
-            [
-                'nama_perlombaan' => $request->nama_perlombaan,
-                'deskripsi_perlombaan' => $request->deskripsi_perlombaan,
-                'tanggal_pendaftaran_dibuka' => $request->tanggal_pendaftaran_dibuka,
-                'tanggal_pendaftaran_ditutup' => $request->tanggal_pendaftaran_ditutup,
-                'tanggal_pelaksanaan' => $request->tanggal_pelaksanaan,
-                'tempat_pelaksanaan' => $request->tempat_pelaksanaan,
-                'kategori_perlombaan' => $request->kategori_perlombaan,
-            ]
-        );
+        // Untuk validasi tanggal pendaftaran dibuka dan ditutup
+        $tanggal_pendaftaran_dibuka = Carbon::parse($request->tanggal_pendaftaran_dibuka)->format('Y-m-d');
+        $tanggal_pendaftaran_ditutup = Carbon::parse($request->tanggal_pendaftaran_ditutup)->format('Y-m-d');
 
-        if (!$data->wasRecentlyCreated && $data->wasChanged()) {
-            return Response()->json(['status' => true, 'message' => 'Data berhasil diubah!']);
+        if ($tanggal_pendaftaran_ditutup <= $tanggal_pendaftaran_dibuka) {
+            return Response()->json(['status' => false, 'message' => 'Tanggal pendaftaran ditutup tidak boleh kurang atau sama dengan tanggal pendaftaran dibuka!']);
+        } else {
+            $data = Perlombaan::updateOrCreate(
+                ['id' => $request->id],
+                [
+                    'nama_perlombaan' => $request->nama_perlombaan,
+                    'deskripsi_perlombaan' => $request->deskripsi_perlombaan,
+                    'tanggal_pendaftaran_dibuka' => $request->tanggal_pendaftaran_dibuka,
+                    'tanggal_pendaftaran_ditutup' => $request->tanggal_pendaftaran_ditutup,
+                    'tempat_pelaksanaan' => $request->tempat_pelaksanaan,
+                    'kategori_perlombaan' => $request->kategori_perlombaan,
+                ]
+            );
+
+            if (!$data->wasRecentlyCreated && $data->wasChanged()) {
+                return Response()->json(['status' => true, 'message' => 'Data berhasil diubah!']);
+            }
+            if (!$data->wasRecentlyCreated && !$data->wasChanged()) {
+                return Response()->json(['status' => false, 'message' => 'Data tidak ada yang diubah!']);
+            }
+            if ($data->wasRecentlyCreated) {
+                return Response()->json(['status' => true, 'message' => 'Data berhasil ditambahkan!']);
+            }
         }
-        if (!$data->wasRecentlyCreated && !$data->wasChanged()) {
-            return Response()->json(['status' => false, 'message' => 'Data tidak ada yang diubah!']);
-        }
-        if ($data->wasRecentlyCreated) {
-            return Response()->json(['status' => true, 'message' => 'Data berhasil ditambahkan!']);
+    }
+
+    // Buat jadwal pertandingan acak
+    public function create_random_pertandingan(Request $request)
+    {
+        $id_perlombaan = $request->id;
+        $data_perlombaan = Perlombaan::findOrFail($id_perlombaan);
+
+        // Cek jika kategori perlombaan adalah single
+        if ($data_perlombaan->kategori_perlombaan == 'Single') {
+            $data_peserta = Peserta::where('perlombaans_id', $id_perlombaan)->get()->toArray();
+            $jumlah_peserta = count($data_peserta);
+
+            // Jika jumlah peserta kurang dari 2
+            if ($jumlah_peserta < 2) {
+                return Response()->json(['status' => false, 'message' => 'Jumlah peserta kurang dari 2!']);
+            } else {
+                // Jika jumlah peserta genap
+                if ($jumlah_peserta % 2 == 0) {
+                    // Acak array data_peserta untuk mengacak urutan peserta, sehingga unik urutannya
+                    shuffle($data_peserta);
+
+                    // Buat pasangan untuk pertandingannya
+                    $pair_count = $jumlah_peserta / 2;
+
+                    // Dapatkan tanggal_pendaftaran_ditutup dari data perlombaan
+                    $tanggal_pendaftaran_ditutup = Carbon::parse($data_perlombaan->tanggal_pendaftaran_ditutup);
+
+                    // Kalkulasi tanggal mulai dan tanggal selesai berdasarkan 'tanggal_pendaftaran_ditutup'
+                    $start_date = $tanggal_pendaftaran_ditutup->addDay(1);
+                    $end_date = $start_date->addDay($pair_count - 1);
+
+                    for ($i = 0; $i < $pair_count; $i++) {
+                        $index1 = $i * 2;
+                        $index2 = $index1 + 1;
+
+                        // Cek jika index2 berada dalam batas array
+                        if (isset($data_peserta[$index2])) {
+                            // Generate random tanggal_jadwal between the calculated date range
+                            // Buat tanggal jadwal secara acak antara tanggal mulai dan tanggal selesai
+                            $random_date = Carbon::createFromTimestamp(rand($start_date->timestamp, $end_date->timestamp));
+
+                            // Simpan pasangan pertandingannya ke tabel pertandingans
+                            Pertandingan::create([
+                                'perlombaans_id' => $id_perlombaan,
+                                'pesertas_id_1' => $data_peserta[$index1]['users_id'],
+                                'pesertas_id_2' => $data_peserta[$index2]['users_id'],
+                                'tanggal_jadwal' => $random_date->format('Y-m-d H:i:s')
+                            ]);
+                        }
+                    }
+
+                    return Response()->json(['status' => true, 'message' => 'Jadwal pertandingan berhasil dibuat!']);
+                } else {
+                    // Jika jumlah peserta ganjil
+                    return Response()->json(['status' => false, 'message' => 'Jumlah peserta tidak boleh ganjil!']);
+                }
+            }
+        // Cek jika kategori perlombaan adalah double
+        } elseif ($data_perlombaan->kategori_perlombaan == 'Double') {
+            $data_peserta = Peserta::where('perlombaans_id', $id_perlombaan)->get()->toArray();
+            $jumlah_peserta = count($data_peserta);
+
+            // Jika jumlah peserta kurang dari 2
+            if ($jumlah_peserta < 2) {
+                return Response()->json(['status' => false, 'message' => 'Jumlah peserta kurang dari 2!']);
+            } else {
+                // Jika jumlah peserta genap
+                if ($jumlah_peserta % 2 == 0) {
+                    // Acak array data_peserta untuk mengacak urutan peserta, sehingga unik urutannya
+                    shuffle($data_peserta);
+
+                    // Buat pasangan untuk pertandingannya
+                    $pair_count = $jumlah_peserta / 2;
+
+                    // Dapatkan tanggal_pendaftaran_ditutup dari data perlombaan
+                    $tanggal_pendaftaran_ditutup = Carbon::parse($data_perlombaan->tanggal_pendaftaran_ditutup);
+
+                    // Kalkulasi tanggal mulai dan tanggal selesai berdasarkan 'tanggal_pendaftaran_ditutup'
+                    $start_date = $tanggal_pendaftaran_ditutup->addDay(1);
+                    $end_date = $start_date->addDay($pair_count - 1);
+
+                    for ($i = 0; $i < $pair_count; $i++) {
+                        $index1 = $i * 2;
+                        $index2 = $index1 + 1;
+
+                        // Cek jika index2 berada dalam batas array
+                        if (isset($data_peserta[$index2])) {
+                            // Generate random tanggal_jadwal between the calculated date range
+                            // Buat tanggal jadwal secara acak antara tanggal mulai dan tanggal selesai
+                            $random_date = Carbon::createFromTimestamp(rand($start_date->timestamp, $end_date->timestamp));
+
+                            // Simpan pasangan pertandingannya ke tabel pertandingans
+                            Pertandingan::create([
+                                'perlombaans_id' => $id_perlombaan,
+                                'pesertas_id_1' => $data_peserta[$index1]['users_id'],
+                                'pesertas_id_2' => $data_peserta[$index2]['users_id'],
+                                'tanggal_jadwal' => $random_date->format('Y-m-d H:i:s')
+                            ]);
+                        }
+                    }
+
+                    return Response()->json(['status' => true, 'message' => 'Jadwal pertandingan berhasil dibuat!']);
+                } else {
+                    // Jika jumlah peserta ganjil
+                    return Response()->json(['status' => false, 'message' => 'Jumlah peserta tidak boleh ganjil!']);
+                }
+            }
+        } else {
+            return Response()->json(['status' => false, 'message' => 'Kategori perlombaan tidak ditemukan!']);
         }
     }
 
@@ -107,7 +265,7 @@ class PerlombaanController extends Controller
     public function show($id)
     {
         $data = Perlombaan::findOrFail($id);
-        if(request()->ajax()){
+        if (request()->ajax()) {
             $data = Perlombaan::findOrFail($id);
             $peserta = Peserta::with('user')->where('perlombaans_id', $data->id)->get();
 
@@ -152,9 +310,11 @@ class PerlombaanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $data = Perlombaan::findOrFail($request->id);
+
+        return Response()->json($data);
     }
 
     /**
@@ -181,5 +341,4 @@ class PerlombaanController extends Controller
         $perserta = Peserta::where('perlombaans_id', $data->id)->get();
         return view('pages.admin.perlombaan.show', compact('data', 'perserta'));
     }
-
 }

@@ -39,6 +39,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
     integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"
+    integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
 <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
@@ -48,6 +51,61 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
+
+<script>
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "7000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    function notifikasi(data) {
+        if (data.status) {
+            var titleNotif = 'Sukses';
+            var typeNotif = 'success';
+        } else {
+            var titleNotif = 'Gagal';
+            var typeNotif = 'error';
+        }
+
+        // $.notify(
+        //     data.message,
+        //     {position: "top center", className: typeNotif}
+        // );
+
+        toastr[typeNotif](data.message, titleNotif);
+    }
+
+    function failedNotifikasi(msg = "") {
+        var msgSend = "";
+        if (msg == "") {
+            msgSend = "Gagal memproses data"
+        } else(
+            msgSend = msg
+        )
+
+        // $.notify(
+        //     msgSend, {
+        //         position: "top center",
+        //         className: "error"
+        //     }
+        // );
+
+        toastr["error"](msgSend, "Gagal");
+    }
+</script>
 
 {{-- <script>
     jQuery.datetimepicker.setLocale('id');

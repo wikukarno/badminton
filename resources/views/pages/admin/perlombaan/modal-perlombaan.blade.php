@@ -23,21 +23,15 @@
                         <div class="col-12 col-lg-4">
                             <div class="form-group">
                                 <label for="tanggal">Tanggal Pendaftaran Dibuka</label>
-                                <input type="date" name="tanggal_pendaftaran_dibuka" id="tanggal_pendaftaran_dibuka" class="form-control">
+                                <input type="date" name="tanggal_pendaftaran_dibuka" id="tanggal_pendaftaran_dibuka"
+                                    class="form-control">
                             </div>
                         </div>
                         <div class="col-12 col-lg-4">
                             <div class="form-group">
                                 <label for="tanggal">Tanggal Pendaftaran Ditutup</label>
-                                <input type="date" name="tanggal_pendaftaran_ditutup" id="tanggal_pendaftaran_ditutup" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-lg-12">
-                            <div class="form-group">
-                                <label for="tanggal">Tanggal Perlombaan</label>
-                                <input type="date" name="tanggal_pelaksanaan" id="tanggal_pelaksanaan" class="form-control">
+                                <input type="date" name="tanggal_pendaftaran_ditutup"
+                                    id="tanggal_pendaftaran_ditutup" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -49,8 +43,10 @@
                         </div>
                         <div class="col-12 col-lg-6 mb-3">
                             <label for="kategori_perlombaan">Kategori Perlombaan</label>
-                            <input type="text" class="form-control" name="kategori_perlombaan" id="kategori_perlombaan"
-                                placeholder="Single / Team">
+                            <select name="kategori_perlombaan" id="kategori_perlombaan" class="form-control">
+                                <option value="Single">Single</option>
+                                <option value="Double">Double</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row mt-3">

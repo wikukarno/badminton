@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('perlombaans', function (Blueprint $table) {
+        Schema::create('pertandingans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_perlombaan', 30);
-            $table->longText('deskripsi_perlombaan');
-            $table->dateTime('tanggal_pendaftaran_dibuka');
-            $table->dateTime('tanggal_pendaftaran_ditutup');
-            $table->string('tempat_pelaksanaan', 30);
-            $table->string('kategori_perlombaan', 30); //single, double
+            $table->string('perlombaans_id', 12);
+            $table->string('pesertas_id_1', 12);
+            $table->string('pesertas_id_2', 12);
+            $table->dateTime('tanggal_jadwal');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('perlombaans');
+        Schema::dropIfExists('pertandingans');
     }
 };

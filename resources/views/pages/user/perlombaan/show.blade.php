@@ -30,10 +30,6 @@
                                         <p>{{ $data->tanggal_pendaftaran_ditutup }}</p>
                                     </li>
                                     <li>
-                                        <h5>Tanggal Perlombaan</h5>
-                                        <p>{{ $data->tanggal_pelaksanaan }}</p>
-                                    </li>
-                                    <li>
                                         <h5>Tempat Perlombaan</h5>
                                         <p>{{ $data->tempat_pelaksanaan }}</p>
                                     </li>
