@@ -28,4 +28,19 @@ class Pertandingan extends Model
     {
         return $this->belongsTo(User::class, 'users_id', 'id');
     }
+
+    public function perlombaan()
+    {
+        return $this->belongsTo(Perlombaan::class, 'perlombaans_id', 'id');
+    }
+
+    public function peserta_1()
+    {
+        return $this->belongsTo(Peserta::class, 'pesertas_id_1', 'id');
+    }
+
+    public function peserta_2()
+    {
+        return $this->belongsTo(Peserta::class, 'pesertas_id_2', 'id');
+    }
 }

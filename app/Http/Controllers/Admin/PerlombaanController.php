@@ -188,8 +188,8 @@ class PerlombaanController extends Controller
                             // Simpan pasangan pertandingannya ke tabel pertandingans
                             Pertandingan::create([
                                 'perlombaans_id' => $id_perlombaan,
-                                'pesertas_id_1' => $data_peserta[$index1]['users_id'],
-                                'pesertas_id_2' => $data_peserta[$index2]['users_id'],
+                                'pesertas_id_1' => $data_peserta[$index1]['id'],
+                                'pesertas_id_2' => $data_peserta[$index2]['id'],
                                 'tanggal_jadwal' => $random_date->format('Y-m-d H:i:s')
                             ]);
                         }

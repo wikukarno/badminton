@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\PenggunaController;
 use App\Http\Controllers\Admin\PengurusController;
 use App\Http\Controllers\Admin\PerlombaanController;
+use App\Http\Controllers\Admin\PertandinganController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\VerifikasiPenggunaController;
 use App\Http\Controllers\Admin\WasitController;
@@ -54,6 +55,9 @@ Route::prefix('pages/admin')
         Route::post('/update/perlombaan', [PerlombaanController::class, 'update'])->name('0.update.perlombaan');
         Route::post('/hapus/perlombaan', [PerlombaanController::class, 'destroy'])->name('0.delete.perlombaan');
         Route::post('/create/random/pertandingan', [PerlombaanController::class, 'create_random_pertandingan'])->name('0.create.random.pertandingan');
+        
+        // Pertandingan
+        Route::get('/pertandingan', [PertandinganController::class, 'index'])->name('0.pertandingan.index');
 
         Route::resource('perlombaan-admin', PerlombaanController::class);
         // Wasit
