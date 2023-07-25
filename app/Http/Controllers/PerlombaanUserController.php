@@ -8,7 +8,9 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use PDF;
 
 class PerlombaanUserController extends Controller
 {
@@ -52,9 +54,7 @@ class PerlombaanUserController extends Controller
                     $peserta = Peserta::where('users_id', Auth::user()->id)->where('perlombaans_id', $item->id)->first();
                     if($peserta != null){
                         return '
-                            <span class="badge badge-success">
-                                Anda Sudah Terdaftar
-                            </span>
+                            <a href="'. route('1.download.kartu', $item->id) .'" class="btn btn-success">Download Kartu Peserta</a>
                         ';
                     }else{
                         return '
@@ -153,5 +153,23 @@ class PerlombaanUserController extends Controller
     {
         $data = Perlombaan::findOrFail($id);
         return view('pages.user.perlombaan.create', compact('data'));
+    }
+
+    public function downloadKartu($id)
+    {
+        $path = base_path('/public/assets/images/pbsi.png');
+        // $path = url('/backend/img/team-1.jpg');
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $pic = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
+        $data = Peserta::with('user')->where('users_id', Auth::user()->id)->where('perlombaans_id', $id)->first();
+        
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cetak/kartu-peserta', [
+            'data' => $data,
+            'pic' => $pic,
+        ])->setPaper('a4', 'potrait');
+        // return $pdf->stream();
+        return $pdf->download('Kartu Peserta - ' . Auth::user()->name . '.pdf');
     }
 }

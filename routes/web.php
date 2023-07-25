@@ -88,6 +88,7 @@ Route::prefix('pages/user')
     ->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('1.dashboard');
 
+        Route::get('/download/kartu/{nama}', [PerlombaanUserController::class, 'downloadKartu'])->name('1.download.kartu');
         Route::get('/perlombaan/{id}/daftar', [PerlombaanUserController::class, 'daftar'])->name('1.daftar');
         Route::resource('perlombaan', PerlombaanUserController::class);
         Route::resource('akun', ProfileUserController::class);
