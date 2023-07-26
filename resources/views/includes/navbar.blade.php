@@ -28,6 +28,7 @@
                         <li class="{{ (request()->is('berita') ? 'active' : '') }}"><a href="/berita" class="nav-link">Berita</a></li>
                         <li class="{{ (request()->is('wasit') ? 'active' : '') }}"><a href="/wasit" class="nav-link">Wasit</a></li>
                         <li class="{{ (request()->is('pengurus') ? 'active' : '') }}"><a href="/pengurus" class="nav-link">Pengurus</a></li>
+                        <li class="{{ (request()->is('pertandingan') ? 'active' : '') }}"><a href="/pertandingan" class="nav-link">Pertandingan</a></li>
                         {{-- <li><a href="#" class="nav-link">Kejuaraan</a></li> --}}
                         {{-- <li><a href="#" class="nav-link">Jadwal Pertandingan</a></li> --}}
                     </ul>

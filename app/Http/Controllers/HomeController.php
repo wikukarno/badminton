@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Berita;
 use App\Models\Pengurus;
+use App\Models\Pertandingan;
 use App\Models\User;
 use App\Models\Wasit;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -76,6 +78,29 @@ class HomeController extends Controller
                 ->make(true);
         }
         return view('pages.pengurus');
+    }
+
+    public function pertandingan()
+    {
+        if (request()->ajax()) {
+            $query = Pertandingan::with(['perlombaan', 'peserta_1', 'peserta_2', 'user'])->orderBy('id', 'DESC')->get();
+
+            return datatables()->of($query)
+                ->addIndexColumn()
+                ->editColumn('pesertas_id_1', function ($item) {
+                    return $item->peserta_1->user->name;
+                })
+                ->editColumn('pesertas_id_2', function ($item) {
+                    return $item->peserta_2->user->name;
+                })
+                ->editColumn('tanggal_jadwal', function ($item) {
+                    return Carbon::parse($item->tanggal_jadwal)->isoFormat('D MMMM Y');
+                })
+
+                ->rawColumns(['peserta_1', 'peserta_2', 'tanggal_jadwal'])
+                ->make(true);
+        }
+        return view('pages.pertandingan');
     }
 
     public function berita()
