@@ -59,6 +59,8 @@ Route::prefix('pages/admin')
         
         // Pertandingan
         Route::get('/pertandingan', [PertandinganController::class, 'index'])->name('0.pertandingan.index');
+        Route::post('/pertandingan/update/skor', [PertandinganController::class, 'update_skor'])->name('0.pertandingan.update-skor');
+        Route::post('/pertandingan/store/skor', [PertandinganController::class, 'store_skor'])->name('0.pertandingan.store-skor');
 
         Route::resource('perlombaan-admin', PerlombaanController::class);
         // Wasit
