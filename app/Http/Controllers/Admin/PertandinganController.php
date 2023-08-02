@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pertandingan;
+use App\Models\Peserta;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -51,18 +53,39 @@ class PertandinganController extends Controller
                 ->editColumn('action', function ($item) {
                     $tanggal_jadwal = Carbon::parse($item->tanggal_jadwal)->format('Y-m-d');
                     $tanggal_sekarang = Carbon::now()->format('Y-m-d');
+                    $status = $item->status;
+                    $skor_peserta_1 = $item->skor_peserta_1;
+                    $skor_peserta_2 = $item->skor_peserta_2;
 
                     if ($tanggal_sekarang >= $tanggal_jadwal) {
-                        return '
-                            <div class="d-flex">
-                                <button class="btn btn-warning btn-sm mb-3 mx-1" title="Update Skor Pertandingan" onClick="btnUpdateSkorPertandingan(' . $item->id . ')">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </button>
-                                <button class="btn btn-success btn-sm mb-3 mx-1" title="Update Status Pertandingan" onClick="btnUpdateStatusPertandingan(' . $item->id . ')">
-                                    <i class="fas fa-check"></i>
-                                </button>
-                            </div>
-                        ';
+                        if ($status == 'selesai') {
+                            if ($skor_peserta_1 != $skor_peserta_2) {
+                                return '
+                                    <div class="d-flex">
+                                        <button class="btn btn-success btn-sm mb-3 mx-1" title="Lihat Hasil Pertandingan" onClick="btnLihatHasilPertandingan(' . $item->id . ')">
+                                            <i class="fas fa-medal"></i>
+                                        </button>
+                                    </div>
+                                ';
+                            } else {
+                                return '
+                                    <a href="javascript:void(0);" title="Lihat Info" class="btn btn-success btn-sm mb-3 mx-1" onClick="btnSeriPertandingan()">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                    </a>
+                                ';
+                            }
+                        } else {
+                            return '
+                                <div class="d-flex">
+                                    <button class="btn btn-warning btn-sm mb-3 mx-1" title="Update Skor Pertandingan" onClick="btnUpdateSkorPertandingan(' . $item->id . ')">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    <button class="btn btn-success btn-sm mb-3 mx-1" title="Update Status Pertandingan" onClick="btnUpdateStatusPertandingan(' . $item->id . ')">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </div>
+                            ';
+                        }
                     } else {
                         return '
                             <a href="javascript:void(0);" title="Lihat Info" class="btn btn-warning btn-sm mb-3 mx-1" onClick="btnInfoPertandingan()">
@@ -103,5 +126,86 @@ class PertandinganController extends Controller
         }
 
         return Response()->json($results);
+    }
+
+    public function update_status(Request $request)
+    {
+        try {
+            $data = Pertandingan::findOrFail($request->id);
+            $skor_peserta_1 = $data->skor_peserta_1;
+            $skor_peserta_2 = $data->skor_peserta_2;
+
+            if ($skor_peserta_1 == $skor_peserta_2) {
+                $data->status = 'selesai';
+                $data->save();
+
+                // Buat tanggal jadwal baru secara random
+                $tanggal_jadwal = Carbon::now()->addDays(rand(1, 7))->format('Y-m-d H:i:s');
+
+                // Adu ulang pertandingannya jika seri
+                Pertandingan::create([
+                    'perlombaans_id' => $data->perlombaans_id,
+                    'pesertas_id_1' => $data->pesertas_id_1,
+                    'pesertas_id_2' => $data->pesertas_id_2,
+                    'tanggal_jadwal' => $tanggal_jadwal,
+                    'status' => 'menunggu',
+                ]);
+
+                $results = (['status' => true, 'message' => 'Status pertandingan berhasil diubah, dan pertandingan akan diadu ulang.']);
+            } else {
+                $data->status = 'selesai';
+                $pemenang_id = null;
+
+                // Jika skor peserta 1 lebih besar dari peserta 2, maka peserta 1 menang
+                // Selain itu, peserta 2 menang
+                if ($skor_peserta_1 > $skor_peserta_2) {
+                    $pemenang_id = $data->pesertas_id_1;
+                } else {
+                    $pemenang_id = $data->pesertas_id_2;
+                }
+
+                $data->pemenang_id = $pemenang_id;
+                $data->save();
+
+                $results = (['status' => true, 'message' => 'Status pertandingan berhasil diubah, dan pemenang telah ditentukan.']);
+            }
+        } catch (\Throwable $th) {
+            $results = (['status' => false, 'message' => 'Terjadi kesalahan. ' . $th->getMessage()]);
+        }
+
+        return Response()->json($results);
+    }
+
+    public function hasil(Request $request)
+    {
+        $data = Pertandingan::with(['peserta_1', 'peserta_2'])->findOrFail($request->id);
+
+        $pemenang = $this->_cek_peserta($data->pemenang_id);
+        $skor_peserta_1 = $data->skor_peserta_1;
+        $skor_peserta_2 = $data->skor_peserta_2;
+        $peserta = '';
+
+        if ($skor_peserta_1 > $skor_peserta_2) {
+            $peserta = 'Peserta 1';
+        } else {
+            $peserta = 'Peserta 2';
+        }
+
+        $data_results = [
+            'pemenang' => $pemenang,
+            'peserta' => $peserta,
+            'skor_peserta_1' => $skor_peserta_1,
+            'skor_peserta_2' => $skor_peserta_2,
+        ];
+
+        return Response()->json($data_results);
+    }
+
+    private function _cek_peserta($id)
+    {
+        $data = Peserta::with(['user'])->findOrFail($id);
+        $peserta = $data->user->name;
+
+        return $peserta;
     }
 }

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->dateTime('tanggal_jadwal');
             $table->string('skor_peserta_1', 5)->nullable();
             $table->string('skor_peserta_2', 5)->nullable();
+            $table->string('pemenang_id', 12)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
