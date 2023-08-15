@@ -108,7 +108,7 @@
                                 @csrf
                                 <input type="hidden" name="perlombaans_id" id="perlombaans_id"
                                     value="{{ $data->id }}">
-                                @if ($data->kategori_perlombaan == 'Double')
+                                @if ($data->kategori_perlombaan == 'Double Pria' || $data->kategori_perlombaan == 'Double Wanita')
                                     <div class="row">
                                         <div class="col-12 col-lg-12">
                                             <div class="form-group">

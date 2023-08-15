@@ -44,8 +44,10 @@
                         <div class="col-12 col-lg-6 mb-3">
                             <label for="kategori_perlombaan">Kategori Perlombaan</label>
                             <select name="kategori_perlombaan" id="kategori_perlombaan" class="form-control">
-                                <option value="Single">Single</option>
-                                <option value="Double">Double</option>
+                                <option value="Single Pria">Single Pria</option>
+                                <option value="Single Wanita">Single Wanita</option>
+                                <option value="Double Pria">Double Pria</option>
+                                <option value="Double Wanita">Double Wanita</option>
                             </select>
                         </div>
                     </div>

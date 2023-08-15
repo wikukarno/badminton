@@ -37,7 +37,10 @@ class PerlombaanUserController extends Controller
         }
 
         if (request()->ajax()) {
-            $query = Perlombaan::query();
+            $jenis_kelamin = Auth::user()->jenis_kelamin;
+            $cek_jenis_kelamin = $jenis_kelamin == 'Laki-laki' ? 'Pria' : 'Wanita';
+
+            $query = Perlombaan::where('kategori_perlombaan', 'like', '%' . $cek_jenis_kelamin . '%')->get();
 
             return datatables()->of($query)
                 ->addIndexColumn()
