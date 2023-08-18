@@ -20,7 +20,7 @@ return new class extends Migration
             $table->dateTime('tanggal_pendaftaran_dibuka');
             $table->dateTime('tanggal_pendaftaran_ditutup');
             $table->string('tempat_pelaksanaan', 30);
-            $table->string('kategori_perlombaan', 30); //single, double
+            $table->string('kategori_perlombaan', 30); //tunggal, ganda, ganda campuran
             $table->timestamps();
             $table->softDeletes();
         });
