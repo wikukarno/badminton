@@ -36,18 +36,18 @@ class PertandinganController extends Controller
                         return '<span class="badge badge-success">Selesai</span>';
                     }
                 })
-                ->editColumn('skor_peserta_1', function ($item) {
-                    if ($item->skor_peserta_1 == null) {
-                        return '-';
-                    } else {
-                        return $item->skor_peserta_1;
-                    }
+                ->editColumn('skor_pertandingan', function ($item) {
+                    return '
+                        <a href="javascript:void(0);" title="Lihat Skor Pertandingan" class="btn btn-warning btn-sm mb-3 mx-1" onClick="btnSkorPertandingan()">
+                            <i class="fas fa-star"></i>
+                        </a>
+                    ';
                 })
-                ->editColumn('skor_peserta_2', function ($item) {
-                    if ($item->skor_peserta_2 == null) {
+                ->editColumn('durasi', function ($item) {
+                    if ($item->durasi == null) {
                         return '-';
                     } else {
-                        return $item->skor_peserta_2;
+                        return $item->durasi;
                     }
                 })
                 ->editColumn('action', function ($item) {
@@ -95,7 +95,7 @@ class PertandinganController extends Controller
                     }
                 })
 
-                ->rawColumns(['peserta_1', 'peserta_2', 'tanggal_jadwal', 'status', 'skor_peserta_1', 'skor_peserta_2', 'action'])
+                ->rawColumns(['peserta_1', 'peserta_2', 'tanggal_jadwal', 'status', 'skor_pertandingan', 'durasi', 'action'])
                 ->make(true);
         }
 

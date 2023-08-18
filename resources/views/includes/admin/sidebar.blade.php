@@ -22,10 +22,10 @@
                     <span>Perlombaan</span></a>
             </li>
 
-            <li class="{{ (request()->is('pages/admin/pertandingan') ? 'active' : '') }}">
+            {{-- <li class="{{ (request()->is('pages/admin/pertandingan') ? 'active' : '') }}">
                 <a href="{{ route('0.pertandingan.index') }}" class="nav-link"><i class="fas fa-medal"></i>
                     <span>Pertandingan</span></a>
-            </li>
+            </li> --}}
 
             <li class="{{ (request()->is('pages/admin/verifikasi') ? 'active' : '') }}">
                 <a href="{{ route('0.verifikasi') }}" class="nav-link"><i class="fas fa-user-check"></i>
