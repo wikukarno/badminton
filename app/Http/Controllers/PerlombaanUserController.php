@@ -38,9 +38,9 @@ class PerlombaanUserController extends Controller
 
         if (request()->ajax()) {
             $jenis_kelamin = Auth::user()->jenis_kelamin;
-            $cek_jenis_kelamin = $jenis_kelamin == 'Laki-laki' ? 'Pria' : 'Wanita';
+            $cek_jenis_kelamin = $jenis_kelamin == 'Laki-laki' ? 'Putra' : 'Putri';
 
-            $query = Perlombaan::where('kategori_perlombaan', 'like', '%' . $cek_jenis_kelamin . '%')->get();
+            $query = Perlombaan::where('kategori_perlombaan', 'like', '%' . $cek_jenis_kelamin . '%')->orWhere('kategori_perlombaan', 'like', '%' . 'Campuran' . '%')->get();
 
             return datatables()->of($query)
                 ->addIndexColumn()
@@ -55,11 +55,11 @@ class PerlombaanUserController extends Controller
                 })
                 ->editColumn('action', function ($item) {
                     $peserta = Peserta::where('users_id', Auth::user()->id)->where('perlombaans_id', $item->id)->first();
-                    if($peserta != null){
+                    if ($peserta != null) {
                         return '
-                            <a href="'. route('1.download.kartu', $item->id) .'" class="btn btn-success">Download Kartu Peserta</a>
+                            <a href="' . route('1.download.kartu', $item->id) . '" class="btn btn-success">Download Kartu Peserta</a>
                         ';
-                    }else{
+                    } else {
                         return '
                             <a href="' . route('perlombaan.show', $item->id) . '" class="btn btn-info btn-sm mb-3" >
                                 <i class="fas fa-eye"></i>
@@ -167,7 +167,7 @@ class PerlombaanUserController extends Controller
         $pic = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
         $data = Peserta::with('user')->where('users_id', Auth::user()->id)->where('perlombaans_id', $id)->first();
-        
+
         $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cetak/kartu-peserta', [
             'data' => $data,
             'pic' => $pic,

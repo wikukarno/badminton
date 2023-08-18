@@ -20,6 +20,7 @@
                                         <th>Profile</th>
                                         <th>Email</th>
                                         <th>Nama</th>
+                                        <th>Jenis Kelamin</th>
                                         <th>Nomor HP</th>
                                         <th>Alamat</th>
                                     </tr>
@@ -95,6 +96,7 @@
             { data: 'photo', name: 'photo' },
             { data: 'email', name: 'email' },
             { data: 'name', name: 'name' },
+            { data: 'jenis_kelamin', name: 'jenis_kelamin' },
             { data: 'phone', name: 'phone' },
             { data: 'alamat', name: 'alamat' },
         ],

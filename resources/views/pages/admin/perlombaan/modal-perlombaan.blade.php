@@ -44,10 +44,11 @@
                         <div class="col-12 col-lg-6 mb-3">
                             <label for="kategori_perlombaan">Kategori Perlombaan</label>
                             <select name="kategori_perlombaan" id="kategori_perlombaan" class="form-control">
-                                <option value="Single Pria">Single Pria</option>
-                                <option value="Single Wanita">Single Wanita</option>
-                                <option value="Double Pria">Double Pria</option>
-                                <option value="Double Wanita">Double Wanita</option>
+                                <option value="Tunggal Putra">Tunggal Putra</option>
+                                <option value="Tunggal Putri">Tunggal Putri</option>
+                                <option value="Ganda Putra">Ganda Putra</option>
+                                <option value="Ganda Putri">Ganda Putri</option>
+                                <option value="Ganda Campuran">Ganda Campuran</option>
                             </select>
                         </div>
                     </div>
