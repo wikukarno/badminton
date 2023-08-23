@@ -57,7 +57,7 @@
                                             <th>Peserta 2</th>
                                             <th>Status</th>
                                             <th>Tanggal Jadwal</th>
-                                            <th>Skor</th>
+                                            {{-- <th>Skor</th> --}}
                                             <th>Durasi</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -211,6 +211,7 @@
                                     'success'
                                 )
                                 $('#tb_perlombaan').DataTable().ajax.reload();
+                                $('#tb_pertandingan').DataTable().ajax.reload();
                             } else {
                                 Swal.fire(
                                     'Gagal!',
@@ -447,10 +448,10 @@
                     data: 'tanggal_jadwal',
                     name: 'tanggal_jadwal'
                 },
-                {
-                    data: 'skor_pertandingan',
-                    name: 'skor_pertandingan'
-                },
+                // {
+                //     data: 'skor_pertandingan',
+                //     name: 'skor_pertandingan'
+                // },
                 {
                     data: 'durasi',
                     name: 'durasi'
@@ -496,8 +497,13 @@
                 },
                 dataType: 'json',
                 success: (res) => {
-                    $('#skor_peserta_1').val(res.skor_peserta_1);
-                    $('#skor_peserta_2').val(res.skor_peserta_2);
+                    $('#skor_peserta_1_set_1').val(res.skor_peserta_1_set_1);
+                    $('#skor_peserta_2_set_1').val(res.skor_peserta_2_set_1);
+                    $('#skor_peserta_1_set_2').val(res.skor_peserta_1_set_2);
+                    $('#skor_peserta_2_set_2').val(res.skor_peserta_2_set_2);
+                    $('#skor_peserta_1_set_3').val(res.skor_peserta_1_set_3);
+                    $('#skor_peserta_2_set_3').val(res.skor_peserta_2_set_3);
+                    $('#durasi').val(res.durasi);
                 },
                 error: (xhr) => {
                     console.log(xhr.responseText);
@@ -527,12 +533,21 @@
                         },
                         dataType: 'json',
                         success: (res) => {
-                            Swal.fire(
-                                'Berhasil!',
-                                res.message,
-                                'success'
-                            )
-                            $('#tb_pertandingan').DataTable().ajax.reload();
+                            if (res.status == true) {
+                                Swal.fire(
+                                    'Berhasil!',
+                                    res.message,
+                                    'success'
+                                )
+
+                                $('#tb_pertandingan').DataTable().ajax.reload();
+                            } else {
+                                Swal.fire(
+                                    'Gagal!',
+                                    res.message,
+                                    'error'
+                                )
+                            }
                         },
                         error: (err) => {
                             Swal.fire(
@@ -557,16 +572,27 @@
                 },
                 dataType: 'json',
                 success: (res) => {
-                    var text = "Pemenang pertandingan adalah " + res.peserta +
-                        ". <div class='text-center'><b>" + res.pemenang +
-                        "</b></div>Skor pertandingan adalah " + res.skor_peserta_1 + " - " + res
-                        .skor_peserta_2 + ".";
+                    if (res.skor_peserta_1_set_3 != null) {
+                        var custom = "<br>Set 3: " + res.skor_peserta_1_set_3 + " - " + res.skor_peserta_2_set_3;
+                    } else {
+                        var custom = "";
+                    }
 
-                    Swal.fire({
-                        title: 'Informasi Hasil Pertandingan',
-                        html: text,
-                        icon: 'warning',
-                    })
+                    var text = "Pemenang pertandingan adalah " + res.peserta +
+                        ". <div class='text-center lead'><b>" + res.pemenang +
+                        "</b></div>Skor pertandingan adalah: <br>Set 1: " + res.skor_peserta_1_set_1 + " - " + res.skor_peserta_1_set_2 +
+                        "<br>Set 2: " + res.skor_peserta_2_set_1 + " - " + res.skor_peserta_2_set_2 + 
+                        "" + custom +
+                        "<br>Durasi: " + res.durasi;
+
+                    // Swal.fire({
+                    //     title: 'Informasi Hasil Pertandingan',
+                    //     html: text,
+                    //     icon: 'warning',
+                    // })
+
+                    $('#winnerModal').modal('show');
+                    $('#winnerMessage').html(text);
                 },
                 error: (xhr) => {
                     console.log(xhr.responseText);

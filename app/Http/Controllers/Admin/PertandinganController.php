@@ -36,44 +36,34 @@ class PertandinganController extends Controller
                         return '<span class="badge badge-success">Selesai</span>';
                     }
                 })
-                ->editColumn('skor_pertandingan', function ($item) {
-                    return '
-                        <a href="javascript:void(0);" title="Lihat Skor Pertandingan" class="btn btn-warning btn-sm mb-3 mx-1" onClick="btnSkorPertandingan()">
-                            <i class="fas fa-star"></i>
-                        </a>
-                    ';
-                })
+                // ->editColumn('skor_pertandingan', function ($item) {
+                //     return '
+                //         <a href="javascript:void(0);" title="Lihat Skor Pertandingan" class="btn btn-warning btn-sm mb-3 mx-1" onClick="btnSkorPertandingan()">
+                //             <i class="fas fa-star"></i>
+                //         </a>
+                //     ';
+                // })
                 ->editColumn('durasi', function ($item) {
                     if ($item->durasi == null) {
                         return '-';
                     } else {
-                        return $item->durasi;
+                        return $item->durasi . ' Menit';
                     }
                 })
                 ->editColumn('action', function ($item) {
                     $tanggal_jadwal = Carbon::parse($item->tanggal_jadwal)->format('Y-m-d');
                     $tanggal_sekarang = Carbon::now()->format('Y-m-d');
                     $status = $item->status;
-                    $skor_peserta_1 = $item->skor_peserta_1;
-                    $skor_peserta_2 = $item->skor_peserta_2;
 
                     if ($tanggal_sekarang >= $tanggal_jadwal) {
                         if ($status == 'selesai') {
-                            if ($skor_peserta_1 != $skor_peserta_2) {
-                                return '
-                                    <div class="d-flex">
-                                        <button class="btn btn-success btn-sm mb-3 mx-1" title="Lihat Hasil Pertandingan" onClick="btnLihatHasilPertandingan(' . $item->id . ')">
-                                            <i class="fas fa-medal"></i>
-                                        </button>
-                                    </div>
-                                ';
-                            } else {
-                                return '
-                                    <a href="javascript:void(0);" title="Lihat Info" class="btn btn-success btn-sm mb-3 mx-1" onClick="btnSeriPertandingan()">
-                                        <i class="fas fa-exclamation-circle"></i>
-                                    </a>
-                                ';
-                            }
+                            return '
+                                <div class="d-flex">
+                                    <button class="btn btn-success btn-sm mb-3 mx-1" title="Lihat Hasil Pertandingan" onClick="btnLihatHasilPertandingan(' . $item->id . ')">
+                                        <i class="fas fa-medal"></i>
+                                    </button>
+                                </div>
+                            ';
                         } else {
                             return '
                                 <div class="d-flex">
@@ -114,8 +104,13 @@ class PertandinganController extends Controller
         try {
             $data = Pertandingan::findOrFail($request->id_pertandingan);
 
-            $data->skor_peserta_1 = $request->skor_peserta_1;
-            $data->skor_peserta_2 = $request->skor_peserta_2;
+            $data->skor_peserta_1_set_1 = $request->skor_peserta_1_set_1;
+            $data->skor_peserta_2_set_1 = $request->skor_peserta_2_set_1;
+            $data->skor_peserta_1_set_2 = $request->skor_peserta_1_set_2;
+            $data->skor_peserta_2_set_2 = $request->skor_peserta_2_set_2;
+            $data->skor_peserta_1_set_3 = $request->skor_peserta_1_set_3;
+            $data->skor_peserta_2_set_3 = $request->skor_peserta_2_set_3;
+            $data->durasi = $request->durasi;
             $data->status = 'berlangsung';
 
             $data->save();
@@ -132,42 +127,48 @@ class PertandinganController extends Controller
     {
         try {
             $data = Pertandingan::findOrFail($request->id);
-            $skor_peserta_1 = $data->skor_peserta_1;
-            $skor_peserta_2 = $data->skor_peserta_2;
+            $skor_peserta_1_set_1 = $data->skor_peserta_1_set_1;
+            $skor_peserta_2_set_1 = $data->skor_peserta_2_set_1;
+            $skor_peserta_1_set_2 = $data->skor_peserta_1_set_2;
+            $skor_peserta_2_set_2 = $data->skor_peserta_2_set_2;
+            $skor_peserta_1_set_3 = $data->skor_peserta_1_set_3;
+            $skor_peserta_2_set_3 = $data->skor_peserta_2_set_3;
 
-            if ($skor_peserta_1 == $skor_peserta_2) {
-                $data->status = 'selesai';
-                $data->save();
+            $pemenang_id = null;
 
-                // Buat tanggal jadwal baru secara random
-                $tanggal_jadwal = Carbon::now()->addDays(rand(1, 7))->format('Y-m-d H:i:s');
-
-                // Adu ulang pertandingannya jika seri
-                Pertandingan::create([
-                    'perlombaans_id' => $data->perlombaans_id,
-                    'pesertas_id_1' => $data->pesertas_id_1,
-                    'pesertas_id_2' => $data->pesertas_id_2,
-                    'tanggal_jadwal' => $tanggal_jadwal,
-                    'status' => 'menunggu',
-                ]);
-
-                $results = (['status' => true, 'message' => 'Status pertandingan berhasil diubah, dan pertandingan akan diadu ulang.']);
+            if ($skor_peserta_1_set_1 == null || $skor_peserta_2_set_1 == null || $skor_peserta_1_set_2 == null || $skor_peserta_2_set_2 == null) {
+                $results = (['status' => false, 'message' => 'Skor pertandingan Set 1 dan Set 2 belum diisi semua.']);
             } else {
-                $data->status = 'selesai';
-                $pemenang_id = null;
-
-                // Jika skor peserta 1 lebih besar dari peserta 2, maka peserta 1 menang
-                // Selain itu, peserta 2 menang
-                if ($skor_peserta_1 > $skor_peserta_2) {
+                // Check if Peserta 1 has won the first two sets
+                if ($skor_peserta_1_set_1 > $skor_peserta_2_set_1 && $skor_peserta_1_set_2 > $skor_peserta_2_set_2) {
                     $pemenang_id = $data->pesertas_id_1;
-                } else {
+                }
+                // Check if Peserta 2 has won the first two sets
+                elseif ($skor_peserta_2_set_1 > $skor_peserta_1_set_1 && $skor_peserta_2_set_2 > $skor_peserta_1_set_2) {
                     $pemenang_id = $data->pesertas_id_2;
                 }
+                // Check if both players have won one set each
+                elseif (
+                    ($skor_peserta_1_set_1 > $skor_peserta_2_set_1 && $skor_peserta_2_set_2 > $skor_peserta_1_set_2) ||
+                    ($skor_peserta_2_set_1 > $skor_peserta_1_set_1 && $skor_peserta_1_set_2 > $skor_peserta_2_set_2)
+                ) {
+                    // Rubber set: Set 3 will be played again
+                    if ($skor_peserta_1_set_3 > $skor_peserta_2_set_3) {
+                        $pemenang_id = $data->pesertas_id_1;
+                    } elseif ($skor_peserta_2_set_3 > $skor_peserta_1_set_3) {
+                        $pemenang_id = $data->pesertas_id_2;
+                    }
+                }
 
-                $data->pemenang_id = $pemenang_id;
-                $data->save();
+                if ($pemenang_id != null) {
+                    $data->pemenang_id = $pemenang_id;
+                    $data->status = 'selesai';
+                    $data->save();
 
-                $results = (['status' => true, 'message' => 'Status pertandingan berhasil diubah, dan pemenang telah ditentukan.']);
+                    $results = (['status' => true, 'message' => 'Status pertandingan berhasil diubah, dan pemenang telah ditentukan.']);
+                } else {
+                    $results = (['status' => false, 'message' => 'Skor pertandingan belum memenuhi syarat untuk menentukan pemenang.']);
+                }
             }
         } catch (\Throwable $th) {
             $results = (['status' => false, 'message' => 'Terjadi kesalahan. ' . $th->getMessage()]);
@@ -181,21 +182,46 @@ class PertandinganController extends Controller
         $data = Pertandingan::with(['peserta_1', 'peserta_2'])->findOrFail($request->id);
 
         $pemenang = $this->_cek_peserta($data->pemenang_id);
-        $skor_peserta_1 = $data->skor_peserta_1;
-        $skor_peserta_2 = $data->skor_peserta_2;
+        $skor_peserta_1_set_1 = $data->skor_peserta_1_set_1;
+        $skor_peserta_2_set_1 = $data->skor_peserta_2_set_1;
+        $skor_peserta_1_set_2 = $data->skor_peserta_1_set_2;
+        $skor_peserta_2_set_2 = $data->skor_peserta_2_set_2;
+        $skor_peserta_1_set_3 = $data->skor_peserta_1_set_3;
+        $skor_peserta_2_set_3 = $data->skor_peserta_2_set_3;
+
         $peserta = '';
 
-        if ($skor_peserta_1 > $skor_peserta_2) {
+        // Check if Peserta 1 has won the first two sets
+        if ($skor_peserta_1_set_1 > $skor_peserta_2_set_1 && $skor_peserta_1_set_2 > $skor_peserta_2_set_2) {
             $peserta = 'Peserta 1';
-        } else {
+        }
+        // Check if Peserta 2 has won the first two sets
+        elseif ($skor_peserta_2_set_1 > $skor_peserta_1_set_1 && $skor_peserta_2_set_2 > $skor_peserta_1_set_2) {
             $peserta = 'Peserta 2';
+        }
+        // Check if both players have won one set each
+        elseif (
+            ($skor_peserta_1_set_1 > $skor_peserta_2_set_1 && $skor_peserta_2_set_2 > $skor_peserta_1_set_2) ||
+            ($skor_peserta_2_set_1 > $skor_peserta_1_set_1 && $skor_peserta_1_set_2 > $skor_peserta_2_set_2)
+        ) {
+            // Rubber set: Set 3 will be played again
+            if ($skor_peserta_1_set_3 > $skor_peserta_2_set_3) {
+                $peserta = 'Peserta 1';
+            } elseif ($skor_peserta_2_set_3 > $skor_peserta_1_set_3) {
+                $peserta = 'Peserta 2';
+            }
         }
 
         $data_results = [
             'pemenang' => $pemenang,
             'peserta' => $peserta,
-            'skor_peserta_1' => $skor_peserta_1,
-            'skor_peserta_2' => $skor_peserta_2,
+            'skor_peserta_1_set_1' => $skor_peserta_1_set_1,
+            'skor_peserta_2_set_1' => $skor_peserta_2_set_1,
+            'skor_peserta_1_set_2' => $skor_peserta_1_set_2,
+            'skor_peserta_2_set_2' => $skor_peserta_2_set_2,
+            'skor_peserta_1_set_3' => $skor_peserta_1_set_3,
+            'skor_peserta_2_set_3' => $skor_peserta_2_set_3,
+            'durasi' => $data->durasi . ' Menit',
         ];
 
         return Response()->json($data_results);
