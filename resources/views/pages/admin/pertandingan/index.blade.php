@@ -25,8 +25,8 @@
                                             <th>Peserta 2</th>
                                             <th>Status</th>
                                             <th>Tanggal Jadwal</th>
-                                            <th>Skor Peserta 1</th>
-                                            <th>Skor Peserta 2</th>
+                                            <th>Skor</th>
+                                            <th>Durasi</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -131,12 +131,12 @@
                     name: 'tanggal_jadwal'
                 },
                 {
-                    data: 'skor_peserta_1',
-                    name: 'skor_peserta_1'
+                    data: 'skor_pertandingan',
+                    name: 'skor_pertandingan'
                 },
                 {
-                    data: 'skor_peserta_2',
-                    name: 'skor_peserta_2'
+                    data: 'durasi',
+                    name: 'durasi'
                 },
                 {
                     data: 'action',

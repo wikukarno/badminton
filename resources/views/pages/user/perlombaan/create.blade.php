@@ -108,11 +108,11 @@
                                 @csrf
                                 <input type="hidden" name="perlombaans_id" id="perlombaans_id"
                                     value="{{ $data->id }}">
-                                @if ($data->kategori_perlombaan == 'Double Pria' || $data->kategori_perlombaan == 'Double Wanita')
+                                @if ($data->kategori_perlombaan == 'Ganda Putra' || $data->kategori_perlombaan == 'Ganda Putri' || $data->kategori_perlombaan == 'Ganda Campuran')
                                     <div class="row">
                                         <div class="col-12 col-lg-12">
                                             <div class="form-group">
-                                                <label for="nama_teman">Nama Teman (Untuk Double)</label>
+                                                <label for="nama_teman">Nama Teman (Untuk Ganda)</label>
                                                 <input type="text" name="nama_teman" id="nama_teman"
                                                     class="form-control" placeholder="Nama Teman" required>
                                             </div>

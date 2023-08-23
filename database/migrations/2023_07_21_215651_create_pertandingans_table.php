@@ -20,8 +20,13 @@ return new class extends Migration
             $table->string('pesertas_id_1', 12);
             $table->string('pesertas_id_2', 12);
             $table->dateTime('tanggal_jadwal');
-            $table->string('skor_peserta_1', 5)->nullable();
-            $table->string('skor_peserta_2', 5)->nullable();
+            $table->string('skor_peserta_1_set_1', 5)->nullable();
+            $table->string('skor_peserta_2_set_1', 5)->nullable();
+            $table->string('skor_peserta_1_set_2', 5)->nullable();
+            $table->string('skor_peserta_2_set_2', 5)->nullable();
+            $table->string('skor_peserta_1_set_3', 5)->nullable();
+            $table->string('skor_peserta_2_set_3', 5)->nullable();
+            $table->string('durasi', 5)->nullable();
             $table->string('pemenang_id', 12)->nullable();
             $table->timestamps();
             $table->softDeletes();
