@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Tambah Berita
+Update Berita
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@ Tambah Berita
                 <div class="card">
                     <div class="card-header">
                         <div class="header-title d-lg-flex">
-                            <h3 class="card-title">Tambah Berita</h3>
+                            <h3 class="card-title">Update Berita</h3>
                             {{-- <span class="mt-1 ml-lg-3"><b>{{ $item->name }}</b></span> --}}
                         </div>
                     </div>
